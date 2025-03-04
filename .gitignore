@@ -22,3 +22,12 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Folder hasil kompilasi
+/build/
+/dist/
+
+# File konfigurasi NetBeans yang tidak perlu
+nbproject/private/
+nbproject/BuildImpl.xml
+nbproject/genfiles.properties
