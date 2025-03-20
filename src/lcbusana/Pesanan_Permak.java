@@ -5,18 +5,19 @@
 package lcbusana;
 
 import database.DataPermakBusana;
+import database.koneksi;
 import tools.FormatData;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import tools.ImageUtil;
+import java.sql.*;
+        
 
 /**
  *
@@ -727,8 +728,12 @@ public class Pesanan_Permak extends javax.swing.JPanel {
             lbNilaiUkuran.setText(FormatData.toCm(row.get(8)));
             lbNilaiDeskripsiTambahan.setText(row.get(10));
             lbNilaiTanggal.setText(FormatData.tanggal(row.get(11)));
-            lbNilaiBiaya.setText(FormatData.toRupiah(row.get(12)));
-            lbNilaiMetode.setText(row.get(13));
+            
+            //Mengatur nilai harga berdasarkan metode
+            String biaya = row.get(12);
+            String metode = row.get(13);
+            lbNilaiBiaya.setText(FormatData.toRupiah(biaya)+cekHargaDP(Double.parseDouble(biaya), metode));
+            lbNilaiMetode.setText(metode);
             
             //Menampilkan Gambar pada Model 
             ImageUtil.setImageToLabel(lbNilaiGambarPakaian, row.get(9));
@@ -760,7 +765,7 @@ public class Pesanan_Permak extends javax.swing.JPanel {
         }
     }    
 
-    public void tampilkanDataPermak() {
+    public void tampilkanDataPermakByClass() {
         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
         model.setRowCount(0); // Menghapus data lama
         List<List<Object>> dataPermak = DataPermakBusana.getInstance().getHistoryData();
@@ -770,6 +775,37 @@ public class Pesanan_Permak extends javax.swing.JPanel {
         }
         
         tblData.setModel(model);
+    }
+    
+    public void tampilkanDataPermak() {
+        String query = "SELECT * FROM view_pesanan_permak";
+        try(Connection conn = koneksi.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()){
+            
+            DefaultTableModel model = (DefaultTableModel) tblData.getModel();
+            model.setRowCount(0); // Menghapus data lama
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            
+            while (rs.next()) {
+                Object[] rowData = new Object[columnCount];
+                for (int i = 1; i <= columnCount; i++) {
+                    rowData[i - 1] = rs.getObject(i);
+                }
+                model.addRow(rowData);
+            }
+        } catch(SQLException e){
+            System.out.println("Gagal mengambil data: " + e.getMessage()); 
+        }
+    }
+    
+    private String cekHargaDP(Double harga, String metode){
+        if(metode.equals("DP")){
+            return " (DP: " + FormatData.toRupiah(String.valueOf(harga*0.5)) + ")";
+        } else {
+            return "";  
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

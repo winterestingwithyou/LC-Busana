@@ -284,7 +284,7 @@ public class FormPermak_Jenis extends javax.swing.JPanel {
         data.setUkuranSetelahDiperbaiki(ukuran);
         
         // Menghitung biaya berdasarkan field yang dipilih
-        hitungBiaya();
+//        hitungBiaya();
         
         // Pindah ke halaman selanjutnya Form Permak (Tambahan)        
         main.ubahPanel("ptambahan");

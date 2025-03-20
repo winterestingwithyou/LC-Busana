@@ -131,7 +131,7 @@ public class FormPermak_WaktuBiaya extends javax.swing.JPanel {
         pnlForm.add(jLabel4, gridBagConstraints);
 
         txtBiaya.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtBiaya.setEnabled(false);
+        txtBiaya.setName(""); // NOI18N
         txtBiaya.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtBiayaKeyTyped(evt);
@@ -269,7 +269,8 @@ public class FormPermak_WaktuBiaya extends javax.swing.JPanel {
     private void btnBerikutnyaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBerikutnyaActionPerformed
         // Ambil nilai dari setiap input field
         Date tanggal = (Date) jsTanggal.getValue();
-        long biaya = Long.parseLong(txtBiaya.getText().trim());
+        String biayaDimasukkan = txtBiaya.getText().trim();
+        long biaya = biayaDimasukkan.equals("") ? 0 : Long.parseLong(biayaDimasukkan);
         String metode = "";
         
         if (rbtntf.isSelected()) {
@@ -316,7 +317,7 @@ public class FormPermak_WaktuBiaya extends javax.swing.JPanel {
     }//GEN-LAST:event_txtBiayaKeyTyped
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        tampilkanBiaya();
+//        tampilkanBiaya();
     }//GEN-LAST:event_formComponentShown
 
     public void clear(){

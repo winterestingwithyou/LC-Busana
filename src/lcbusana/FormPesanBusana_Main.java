@@ -291,7 +291,7 @@ public class FormPesanBusana_Main extends javax.swing.JPanel {
         data.setModelDesain(modelDesain);
         
         //Menghitung biaya berdasarkan field yang dipilih
-        hitungBiaya();
+//        hitungBiaya();
         
         //Berpindah ke halaman selanjutnya Form Pesan Busana Ukuran
         main.ubahPanel("bukuran");

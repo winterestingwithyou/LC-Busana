@@ -206,8 +206,8 @@ public class FormPermak_Tambahan extends javax.swing.JPanel {
     
     private void btnSebelumnyaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSebelumnyaActionPerformed
         // Mereset data biaya agar tidak terjadi perulangan perhitungan
-        DataPermakBusana data = DataPermakBusana.getInstance();
-        data.setEstimasiBiaya(0);
+//        DataPermakBusana data = DataPermakBusana.getInstance();
+//        data.setEstimasiBiaya(0);
         
         // Pindah ke halaman sebelumnya Form Permak (jenis)
         main.ubahPanel("pjenis");

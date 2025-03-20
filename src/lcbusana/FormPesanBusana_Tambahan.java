@@ -245,7 +245,7 @@ public class FormPesanBusana_Tambahan extends javax.swing.JPanel {
                 data.setKebutuhanKhusus(kebutuhanKhusus);
         
                 //Menghitung biaya berdasarkan field yang dipilih
-                hitungBiaya();
+//                hitungBiaya();
                 
                 // Lanjut ke halaman berikutnya dengan mengubah panel
                 main.ubahPanel("bwaktubiaya");
@@ -258,7 +258,7 @@ public class FormPesanBusana_Tambahan extends javax.swing.JPanel {
             data.setKebutuhanKhusus(kebutuhanKhusus);
 
             //Menghitung biaya berdasarkan field yang dipilih
-            hitungBiaya();
+//            hitungBiaya();
                 
             // Lanjut ke halaman berikutnya dengan mengubah panel
             main.ubahPanel("bwaktubiaya");

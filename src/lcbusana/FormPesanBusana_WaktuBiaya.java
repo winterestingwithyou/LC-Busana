@@ -141,12 +141,6 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
         pnlForm.add(lblmetode, gridBagConstraints);
 
         txtbiaya.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtbiaya.setEnabled(false);
-        txtbiaya.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtbiayaActionPerformed(evt);
-            }
-        });
         txtbiaya.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtbiayaKeyTyped(evt);
@@ -300,9 +294,11 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
     private void btnberikutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnberikutActionPerformed
         // Ambil nilai dari setiap input field
         Date tanggal = (Date) jsTanggal.getValue();
-        long biaya = Long.parseLong(txtbiaya.getText().trim());
+        String biayaDimasukkan = txtbiaya.getText().trim();
+        long biaya = biayaDimasukkan.equals("") ? 0 : Long.parseLong(biayaDimasukkan);
         String metode = "";
         
+        //Penambahan niali ke metode berdasarkan opsi yang dipilh
         if (rbtntf.isSelected()) {
             metode = "Transfer";
         } else if (rbtntunai.isSelected()){
@@ -339,10 +335,6 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_rbtntfActionPerformed
 
-    private void txtbiayaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbiayaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtbiayaActionPerformed
-
     private void txtbiayaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbiayaKeyTyped
         char c = evt.getKeyChar();
     
@@ -359,7 +351,7 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
     }//GEN-LAST:event_txtbiayaKeyTyped
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        tampilkanBiaya();
+//        tampilkanBiaya();
     }//GEN-LAST:event_formComponentShown
 
     public void clear(){
