@@ -5,7 +5,7 @@
 package lcbusana;
 
 import database.DataPermakBusana;
-import database.koneksi;
+import database.Koneksi;
 import tools.FormatData;
 import java.awt.Component;
 import java.util.ArrayList;
@@ -779,7 +779,7 @@ public class Pesanan_Permak extends javax.swing.JPanel {
     
     public void tampilkanDataPermak() {
         String query = "SELECT * FROM view_pesanan_permak";
-        try(Connection conn = koneksi.getConnection();
+        try(Connection conn = Koneksi.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery()){
             

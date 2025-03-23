@@ -5,7 +5,7 @@
 package lcbusana;
 
 import database.DataPesanBusana;
-import database.koneksi;
+import database.Koneksi;
 import tools.FormatData;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
@@ -952,21 +952,21 @@ public class Pesanan_Busana extends javax.swing.JPanel {
         }
     }
     
-    public void tampilkanDataPesanByClass(){
-        DefaultTableModel model = (DefaultTableModel) tblData.getModel();
-        model.setRowCount(0); // Menghapus data lama
-        List<List<Object>> dataPesan = DataPesanBusana.getInstance().getHistoryData();
-    
-        for (List<Object> row : dataPesan) {
-            model.addRow(row.toArray());
-        }
-        
-        tblData.setModel(model);
-    }
+//    public void tampilkanDataPesanByClass(){
+//        DefaultTableModel model = (DefaultTableModel) tblData.getModel();
+//        model.setRowCount(0); // Menghapus data lama
+//        List<List<Object>> dataPesan = DataPesanBusana.getInstance().getHistoryData();
+//    
+//        for (List<Object> row : dataPesan) {
+//            model.addRow(row.toArray());
+//        }
+//        
+//        tblData.setModel(model);
+//    }
     
     public void tampilkanDataPesan(){
         String query = "SELECT * FROM view_pesanan_busana";
-        try(Connection conn = koneksi.getConnection();
+        try(Connection conn = Koneksi.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery()){
             
