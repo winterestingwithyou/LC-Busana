@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.JTableHeader;
@@ -21,45 +22,51 @@ import javax.swing.table.JTableHeader;
  *
  * @author Acer
  */
-public class GradientBackgroundCellRenderer extends DefaultTableCellRenderer {
-    private Color color1;
-    private Color color2;
+public class GradientBackgroundRowRenderer extends DefaultTableCellRenderer {
+    private final Color color1;
+    private final Color color2;
     private int x;
     private int width;
-    
-    public GradientBackgroundCellRenderer(Color color1, Color color2) {
+
+    public GradientBackgroundRowRenderer(Color color1, Color color2) {
         this.color1 = color1;
         this.color2 = color2;
-        setOpaque(false);
+        setHorizontalAlignment(SwingConstants.CENTER); // Atur teks ke tengah
+        setOpaque(false); // Matikan warna default agar gradient terlihat
     }
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        Rectangle cellRec = table.getCellRect(row, column, true);
+        Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         
-        // Ambil properti dari header JTable
-        JTableHeader header = table.getTableHeader();
-        if (header != null) {
-            setFont(header.getFont()); // Gunakan font yang sudah diatur di header
-            setForeground(header.getForeground()); // Gunakan warna teks yang sudah diatur di header
+        // Pastikan mengikuti warna dan font dari JTable atau JTableHeader
+        if (table.getTableHeader() != null && table.getTableHeader().getDefaultRenderer() == this) {
+            setFont(table.getTableHeader().getFont());
+            setForeground(table.getTableHeader().getForeground());
+        } else {
+            setFont(table.getFont());
+            setForeground(table.getForeground());
         }
 
-        setHorizontalAlignment(SwingConstants.CENTER); // Pusatkan teks
-        
+        // Hitung posisi gradient agar dinamis
+        Rectangle cellRec = table.getCellRect(row, column, true);
         x = -cellRec.x;
         width = table.getWidth() - cellRec.x;
-        return this;
+
+        return component;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
-        
-        // Gambar gradasi warna
+
+        // Terapkan gradient
         g2.setPaint(new GradientPaint(x, 0, color1, width, 0, color2));
         g2.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
 
+        // Gambarkan teks setelahnya
         super.paintComponent(g);
+
+        g2.dispose();
     }
 }

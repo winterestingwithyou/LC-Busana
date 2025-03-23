@@ -1,6 +1,6 @@
 package decorationcomponent.tableactioncell;
 
-import decorationcomponent.GradientBackgroundCellRenderer;
+import decorationcomponent.GradientBackgroundRowRenderer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -89,8 +89,9 @@ public class testTable extends javax.swing.JFrame {
         header.setFont(new Font("Tahoma", 1, 16));
         header.setForeground(Color.GRAY);
         
-        //Cell Renderer
-        header.setDefaultRenderer(new GradientBackgroundCellRenderer(Color.BLUE, Color.WHITE));
+        //Mengatur Header Renderer
+        GradientBackgroundRowRenderer gradientRenderer = new GradientBackgroundRowRenderer(Color.BLUE, Color.WHITE);  
+        header.setDefaultRenderer(gradientRenderer);
     }
     
     /**
