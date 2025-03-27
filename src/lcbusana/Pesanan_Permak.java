@@ -66,7 +66,6 @@ public class Pesanan_Permak extends javax.swing.JPanel {
         tblData = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
         tblData.setModel(new javax.swing.table.DefaultTableModel(
@@ -74,7 +73,7 @@ public class Pesanan_Permak extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Nama Lengkap", "Nomor Telepon", "Alamat Email", "Alamat Pengiriman", "Jenis Pakaian", "Bahan Pakaian", "Jumlah Pakaian", "Jenis Perbaikan", "Ukuran Setelah diperbaiki", "Foto Pakaian", "Deskripsi Tambahan", "Tanggal Pengembalian", "Estimasi Biaya", "Metode Pembayaran", "Action"
+                "Nama Lengkap", "Nomor Telepon", "Alamat Email", "Alamat Pengiriman", "Jenis Pakaian", "Bahan Pakaian", "Jumlah Pakaian", "Jenis Perbaikan", "Ukuran Setelah diperbaiki", "Foto Pakaian", "Deskripsi Tambahan", "Tanggal Pengembalian", "Estimasi Biaya", "Metode Pembayaran", "Aksi"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -86,8 +85,9 @@ public class Pesanan_Permak extends javax.swing.JPanel {
             }
         });
         tblData.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tblData.setFocusable(false);
         tblData.setRowHeight(40);
-        tblData.setSelectionBackground(new java.awt.Color(255, 204, 204));
+        tblData.setSelectionBackground(new java.awt.Color(232, 212, 182));
         tblData.setSelectionForeground(new java.awt.Color(51, 51, 51));
         tblData.setShowGrid(false);
         jScrollPane1.setViewportView(tblData);

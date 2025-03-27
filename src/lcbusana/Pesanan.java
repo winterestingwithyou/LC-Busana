@@ -13,7 +13,7 @@ import javax.swing.JFrame;
  * @author Acer
  */
 public class Pesanan extends javax.swing.JPanel {
-    private final Pesanan_Busana pesananBusana = new Pesanan_Busana();
+    private Pesanan_Busana pesananBusana;
     private CardLayout card;
     private Pesanan_Permak pesananPermak;
     private Layout main;
@@ -26,6 +26,7 @@ public class Pesanan extends javax.swing.JPanel {
         this.card = (CardLayout) pnlDaftarPesanan.getLayout();
         this.main = (Layout) frame;
         this.pesananPermak = new Pesanan_Permak(main);
+        this.pesananBusana = new Pesanan_Busana(main);
         
         komponenDaftarPesanan();
     }
