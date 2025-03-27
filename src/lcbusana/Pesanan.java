@@ -6,6 +6,7 @@ package lcbusana;
 
 import decorationcomponent.RoundedButton;
 import java.awt.CardLayout;
+import javax.swing.JFrame;
 
 /**
  *
@@ -13,15 +14,18 @@ import java.awt.CardLayout;
  */
 public class Pesanan extends javax.swing.JPanel {
     private final Pesanan_Busana pesananBusana = new Pesanan_Busana();
-    private final Pesanan_Permak pesananPermak = new Pesanan_Permak();
-    private final CardLayout card;
+    private CardLayout card;
+    private Pesanan_Permak pesananPermak;
+    private Layout main;
     
     /**
      * Creates new form Pesanan
      */
-    public Pesanan() {
+    public Pesanan(JFrame frame) {
         initComponents();
         this.card = (CardLayout) pnlDaftarPesanan.getLayout();
+        this.main = (Layout) frame;
+        this.pesananPermak = new Pesanan_Permak(main);
         
         komponenDaftarPesanan();
     }
@@ -52,6 +56,7 @@ public class Pesanan extends javax.swing.JPanel {
         pnlTombol.setLayout(new java.awt.GridBagLayout());
 
         btnPesananBusana.setBackground(new java.awt.Color(207, 183, 146));
+        btnPesananBusana.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnPesananBusana.setText("Pesanan Busana");
         btnPesananBusana.setBorderPainted(false);
         btnPesananBusana.addActionListener(new java.awt.event.ActionListener() {
@@ -67,6 +72,7 @@ public class Pesanan extends javax.swing.JPanel {
         pnlTombol.add(btnPesananBusana, gridBagConstraints);
 
         btnPesananPermak.setBackground(new java.awt.Color(207, 183, 146));
+        btnPesananPermak.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnPesananPermak.setText("Pesanan Permak");
         btnPesananPermak.setBorderPainted(false);
         btnPesananPermak.addActionListener(new java.awt.event.ActionListener() {

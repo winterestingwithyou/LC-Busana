@@ -146,7 +146,7 @@ public class Layout extends javax.swing.JFrame {
 
     private void komponenBody(){    
         pnlBody.add(new Dashboard(this), "dashboard");
-        pnlBody.add(new Pesanan(), "pesanan");
+        pnlBody.add(new Pesanan(this), "pesanan");
         pnlBody.add(bmain, "bmain");
         pnlBody.add(bukuran, "bukuran");
         pnlBody.add(btambahan, "btambahan");

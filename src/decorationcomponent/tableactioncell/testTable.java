@@ -4,6 +4,8 @@ import decorationcomponent.GradientBackgroundRowRenderer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.table.JTableHeader;
 
 /*
@@ -87,10 +89,10 @@ public class testTable extends javax.swing.JFrame {
         JTableHeader header = table.getTableHeader();
         header.setPreferredSize(new Dimension(table.getWidth(), 40));
         header.setFont(new Font("Tahoma", 1, 16));
-        header.setForeground(Color.GRAY);
+        header.setForeground(Color.WHITE);
         
-        //Mengatur Header Renderer
-        GradientBackgroundRowRenderer gradientRenderer = new GradientBackgroundRowRenderer(Color.BLUE, Color.WHITE);  
+        //Mengatur gradientBackground
+        GradientBackgroundRowRenderer gradientRenderer = new GradientBackgroundRowRenderer(new Color(0xab886d), new Color(0x493628), SwingConstants.CENTER);  
         header.setDefaultRenderer(gradientRenderer);
     }
     

@@ -7,16 +7,12 @@ package decorationcomponent;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FontMetrics;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
-import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -31,8 +27,12 @@ public class GradientBackgroundRowRenderer extends DefaultTableCellRenderer {
     public GradientBackgroundRowRenderer(Color color1, Color color2) {
         this.color1 = color1;
         this.color2 = color2;
-        setHorizontalAlignment(SwingConstants.CENTER); // Atur teks ke tengah
         setOpaque(false); // Matikan warna default agar gradient terlihat
+    }
+    
+    public GradientBackgroundRowRenderer(Color color1, Color color2, int alignText) {
+        this(color1, color2);
+        setHorizontalAlignment(alignText);
     }
 
     @Override
