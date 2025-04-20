@@ -283,14 +283,26 @@ public class FormDataDiri extends javax.swing.JPanel {
             return;
         }
         
-        // Simpan data
-        switch(main.getStatus()){
-            case "Busana" -> dataPesanBusana(nama, noWa, email, alamat);            
-            case "Permak" -> dataPermakBusana(nama, noWa, email, alamat);
+        //Cek Apakah sedang mengedit
+        if(main.isOnEdit()){
+            //Update Data
+            switch(main.getStatus()){
+                case "Busana" -> updateDataPesanBusana(nama, noWa, email, alamat);            
+                case "Permak" -> {}
+            }
+            
+            // Selesai Edit, kembali kembali ke Pesanan
+            main.ubahPanel("pesanan");
+        } else {
+            // Simpan data
+            switch(main.getStatus()){
+                case "Busana" -> tambahDataPesanBusana(nama, noWa, email, alamat);            
+                case "Permak" -> tambahDataPermakBusana(nama, noWa, email, alamat);
+            }
+            
+            // Selesai, kembali ke form dashboatd
+            main.ubahPanel("dashboard");
         }
-        
-        // Selesai, kembali ke form dashboatd
-        main.ubahPanel("dashboard");
     }//GEN-LAST:event_btnSelesaiActionPerformed
 
 
@@ -301,7 +313,7 @@ public class FormDataDiri extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSebelumnyaActionPerformed
 
-    private void dataPesanBusana(String nama, String no, String email, String alamat){        
+    private void tambahDataPesanBusana(String nama, String no, String email, String alamat){        
         DataPesanBusana data= DataPesanBusana.getInstance();
         data.setNamaLengkap(nama);
         data.setNomorTelepon(no);
@@ -310,13 +322,22 @@ public class FormDataDiri extends javax.swing.JPanel {
         data.save();
     }
     
-    private void dataPermakBusana(String nama, String no, String email, String alamat){        
-        DataPermakBusana data= DataPermakBusana.getInstance();
+    private void tambahDataPermakBusana(String nama, String no, String email, String alamat){        
+        DataPermakBusana data = DataPermakBusana.getInstance();
         data.setNamaLengkap(nama);
         data.setNomorTelepon(no);
         data.setAlamatEmail(email);
         data.setAlamatPengiriman(alamat);
         data.save();
+    }
+    
+    private void updateDataPesanBusana(String nama, String no, String email, String alamat){
+        DataPesanBusana data= DataPesanBusana.getInstance();
+        data.setNamaLengkap(nama);
+        data.setNomorTelepon(no);
+        data.setAlamatEmail(email);
+        data.setAlamatPengiriman(alamat);
+        data.update();
     }
     
     private void txtNamaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNamaKeyTyped
@@ -384,6 +405,14 @@ public class FormDataDiri extends javax.swing.JPanel {
         txtEmail.setText(null);
         txtNama.setText(null);
         txtNoWA.setText(null);
+    }
+    
+    public void isiDataEdit(){
+        DataPesanBusana data = DataPesanBusana.getInstance();
+        txtAlamat.setText(data.getAlamatPengiriman());
+        txtEmail.setText(data.getAlamatEmail());
+        txtNama.setText(data.getNamaLengkap());
+        txtNoWA.setText(data.getNomorTelepon());
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

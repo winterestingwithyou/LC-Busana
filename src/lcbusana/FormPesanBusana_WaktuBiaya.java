@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import tools.Selector;
 
 /**
  *
@@ -166,11 +167,6 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
         rbtntf.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         rbtntf.setText("Transfer");
         rbtntf.setFocusPainted(false);
-        rbtntf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbtntfActionPerformed(evt);
-            }
-        });
         jPanel5.add(rbtntf);
 
         rbtntunai.setBackground(new java.awt.Color(207, 183, 146));
@@ -307,15 +303,23 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
             metode = "DP";
         }
         
-        //Perbandingan tanggal yang dipilih dengan sekarang
+        // Konversi tanggal ke LocalDate
         LocalDate tanggalDipilih = tanggal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate hariIni = LocalDate.now();
-        
-        // Validasi apakah ada yang kosong
-        if (tanggalDipilih.equals(hariIni) || tanggalDipilih.isBefore(hariIni) || biaya <= 0 || metode.equals("")) {
+
+        // Validasi input kosong (biaya dan metode)
+        if (biaya <= 0 || metode.equals("")) {
             JOptionPane.showMessageDialog(this, "Semua input harus diisi sebelum melanjutkan!", "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
-        } 
+        }
+
+        // Validasi tanggal hanya jika bukan dalam mode edit
+        if (!main.isOnEdit()) {
+            if (tanggalDipilih.equals(hariIni) || tanggalDipilih.isBefore(hariIni)) {
+                JOptionPane.showMessageDialog(this, "Tanggal harus setelah hari ini!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
         
         // Simpan data
         DataPesanBusana data = DataPesanBusana.getInstance();
@@ -330,10 +334,6 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
     private void btnsblmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsblmActionPerformed
         main.ubahPanel("btambahan");
     }//GEN-LAST:event_btnsblmActionPerformed
-
-    private void rbtntfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtntfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rbtntfActionPerformed
 
     private void txtbiayaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbiayaKeyTyped
         char c = evt.getKeyChar();
@@ -351,7 +351,12 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
     }//GEN-LAST:event_txtbiayaKeyTyped
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-//        tampilkanBiaya();
+        //disable beberapa field jika sedang mengedit
+        if(main.isOnEdit()){
+            jsTanggal.setEnabled(false);
+        } else {
+            jsTanggal.setEnabled(true);
+        }
     }//GEN-LAST:event_formComponentShown
 
     public void clear(){
@@ -360,6 +365,14 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
         metodePembayaran.clearSelection();
     }
 
+    public void isiDataEdit(){
+        DataPesanBusana data = DataPesanBusana.getInstance();
+        
+        jsTanggal.setValue(data.getTanggalPemakaian());
+        txtbiaya.setText(Integer.toString((int) data.getKisaranBudget()));
+        Selector.selectRadioByActionCommand(metodePembayaran, data.getMetodePembayaran());
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnberikut;
     private javax.swing.JButton btnsblm;

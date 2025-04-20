@@ -4,6 +4,7 @@
  */
 package lcbusana;
 
+import database.DataPesanBusana;
 import database.Koneksi;
 import decorationcomponent.GradientBackgroundRowRenderer;
 import decorationcomponent.tableactioncell.TableActionCellEditor;
@@ -29,6 +30,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import tools.FormatData;
 
 /**
  *
@@ -183,7 +185,41 @@ public class Pesanan_Busana extends javax.swing.JPanel {
     }
     
     private void editData(int row){
+        //Mengambil nilai dari baris dan menyimpannya di Array
+        int columnCount = tblData.getColumnCount();
+        ArrayList<String> rowData = new ArrayList<>();
+
+        for (int col = 0; col < columnCount - 1; col++) {
+            rowData.add(tblData.getValueAt(row, col).toString());
+        }
         
+        //Mengisi Nilai dari array tadi ke DataPesanBusana
+        DataPesanBusana dataPesanan = DataPesanBusana.getInstance();
+        dataPesanan.setNamaLengkap(rowData.get(0));
+        dataPesanan.setNomorTelepon(rowData.get(1));
+        dataPesanan.setAlamatEmail(rowData.get(2));
+        dataPesanan.setAlamatPengiriman(rowData.get(3));
+        dataPesanan.setJenisBusana(rowData.get(4));
+        dataPesanan.setModelDesain(rowData.get(5));
+        dataPesanan.setWarna(rowData.get(6));
+        dataPesanan.setBahan(rowData.get(7));
+        dataPesanan.setLingkarDada(Double.parseDouble(rowData.get(8)));
+        dataPesanan.setLingkarPinggang(Double.parseDouble(rowData.get(9)));
+        dataPesanan.setLingkarPinggul(Double.parseDouble(rowData.get(10)));
+        dataPesanan.setPanjangLengan(Double.parseDouble(rowData.get(11)));
+        dataPesanan.setPanjangBaju(Double.parseDouble(rowData.get(12)));
+        dataPesanan.setTinggiBadan(Double.parseDouble(rowData.get(13)));
+        dataPesanan.setLebarBahu(Double.parseDouble(rowData.get(14)));
+        dataPesanan.setAplikasiTambahan(rowData.get(15));
+        dataPesanan.setDetailKhusus(rowData.get(16));
+        dataPesanan.setKebutuhanKhusus(rowData.get(17));
+        dataPesanan.setTanggalPemakaian(FormatData.toDate(rowData.get(18)));
+        dataPesanan.setKisaranBudget(Double.parseDouble(rowData.get(19)));
+        dataPesanan.setMetodePembayaran(rowData.get(20));
+        dataPesanan.setIdPelanggan(loadIdPelangganbyEmail(dataPesanan.getAlamatEmail()));
+        dataPesanan.setIdPesananBusana(loadIdPesananbyIdPelanggan(dataPesanan.getIdPelanggan()));
+        
+        main.editPesananBusana();
     }
     
     private void deleteData(int row){
@@ -200,6 +236,52 @@ public class Pesanan_Busana extends javax.swing.JPanel {
         //Menampilkan Struk Pesanan Busana dalam JDialog
         JDialog struk = new Struk_Busana(main, true, dataRow);
         struk.setVisible(true);
+    }
+    
+    private Integer loadIdPesananbyIdPelanggan(int idPelanggan){
+        String query = "SELECT id_pesanan FROM pesanan_busana WHERE id_pelanggan = ?";
+        
+        try (
+            Connection conn = Koneksi.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+        ) {
+            stmt.setInt(1, idPelanggan);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_pesanan");
+                } else {
+                    return null; // Tidak ditemukan
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    private Integer loadIdPelangganbyEmail(String email){
+        String query = "SELECT id_pelanggan FROM pelanggan WHERE email = ?";
+        
+        try (
+            Connection conn = Koneksi.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+        ) {
+            stmt.setString(1, email);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_pelanggan");
+                } else {
+                    return null; // Tidak ditemukan
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     
     private void aturLookAndFeel(){

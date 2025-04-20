@@ -66,4 +66,15 @@ public class FormatData {
             throw new IllegalArgumentException("Nilai RGB harus berupa angka antara 0-255.");
         }
     }
+    
+    public static Date toDate(String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return sdf.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

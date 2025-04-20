@@ -281,17 +281,13 @@ public class FormPesanBusana_Main extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Semua input harus diisi sebelum melanjutkan!", "Peringatan", JOptionPane.WARNING_MESSAGE);
             return; // ❌ Hentikan proses jika ada input yang kosong
         }
-
-        
+       
         // ✅ Jika semua input sudah terisi, Simpan data dan lanjut ke halaman berikutnya
         DataPesanBusana data= DataPesanBusana.getInstance();
         data.setJenisBusana(jenisBusana);
         data.setWarna(FormatData.colorToRGBString(warna));
         data.setBahan(bahan);
         data.setModelDesain(modelDesain);
-        
-        //Menghitung biaya berdasarkan field yang dipilih
-//        hitungBiaya();
         
         //Berpindah ke halaman selanjutnya Form Pesan Busana Ukuran
         main.ubahPanel("bukuran");
@@ -327,17 +323,13 @@ public class FormPesanBusana_Main extends javax.swing.JPanel {
         modelDesain = "";
     }
     
-    private void hitungBiaya(){
+    public void isiDataEdit(){
         DataPesanBusana data = DataPesanBusana.getInstance();
         
-        // Menghitung harga berdasarkan jenis busana
-        switch(data.getJenisBusana()){
-            case "Kebaya" -> data.setKisaranBudget(data.getKisaranBudget() + 200000);
-            case "Gaun" -> data.setKisaranBudget(data.getKisaranBudget() + 200000);
-            case "Tunik" -> data.setKisaranBudget(data.getKisaranBudget() + 200000);
-            case "Jas" -> data.setKisaranBudget(data.getKisaranBudget() + 200000);
-            case "Seragam" -> data.setKisaranBudget(data.getKisaranBudget() + 200000);
-        }
+        cbJenisBusana.setSelectedItem(data.getJenisBusana());
+        warna = FormatData.rgbStringToColor(data.getWarna());
+        txtBahan.setText(data.getBahan());
+        modelDesain = data.getModelDesain();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

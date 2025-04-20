@@ -327,13 +327,13 @@ public class FormPesanBusana_Ukuran extends javax.swing.JPanel {
     
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
         // Ambil nilai dari JSpinner
-        int lingkarDada = (int) jsLingkarDada.getValue();
-        int lingkarPinggang = (int) jsLingkarPinggang.getValue();
-        int lingkarPinggul = (int) jsLingkarPinggul.getValue();
-        int panjangLengan = (int) jsPanjangLengan.getValue();
-        int panjangBaju = (int) jsPanjangBaju.getValue();
-        int tinggiBadan = (int) jsTinggiBadan.getValue();
-        int lebarBahu = (int) jsLebarBahu.getValue();
+        double lingkarDada = ((Number) jsLingkarDada.getValue()).doubleValue();
+        double lingkarPinggang = ((Number) jsLingkarPinggang.getValue()).doubleValue();
+        double lingkarPinggul = ((Number) jsLingkarPinggul.getValue()).doubleValue();
+        double panjangLengan = ((Number) jsPanjangLengan.getValue()).doubleValue();
+        double panjangBaju = ((Number) jsPanjangBaju.getValue()).doubleValue();
+        double tinggiBadan = ((Number) jsTinggiBadan.getValue()).doubleValue();
+        double lebarBahu = ((Number) jsLebarBahu.getValue()).doubleValue();
 
         // Validasi: Semua field harus diisi (> 0)
         if (lingkarDada <= 0 ||
@@ -386,6 +386,18 @@ public class FormPesanBusana_Ukuran extends javax.swing.JPanel {
         jsPanjangLengan.setValue(0);
         jsPanjangBaju.setValue(0);
         jsLebarBahu.setValue(0);       
+    }
+    
+    public void isiDataEdit(){
+        DataPesanBusana data = DataPesanBusana.getInstance();
+        
+        jsLingkarDada.setValue(data.getLingkarDada());
+        jsTinggiBadan.setValue(data.getTinggiBadan());
+        jsLingkarPinggang.setValue(data.getLingkarPinggang());
+        jsLingkarPinggul.setValue(data.getLingkarPinggul());
+        jsPanjangLengan.setValue(data.getPanjangLengan());
+        jsPanjangBaju.setValue(data.getPanjangBaju());
+        jsLebarBahu.setValue(data.getLebarBahu());   
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

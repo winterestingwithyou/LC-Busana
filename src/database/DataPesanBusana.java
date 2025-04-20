@@ -4,9 +4,11 @@
  */
 package database;
 
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,8 +16,9 @@ import java.util.List;
  */
 public class DataPesanBusana {
     private static DataPesanBusana instance;
-    private final List<List<Object>> historyData = new ArrayList<>();
     
+    private int idPelanggan;
+    private int idPesananBusana;
     private String namaLengkap;
     private String nomorTelepon;
     private String alamatEmail;
@@ -111,10 +114,12 @@ public class DataPesanBusana {
     public String getMetodePembayaran() { return metodePembayaran; }
     public void setMetodePembayaran(String metodePembayaran) { this.metodePembayaran = metodePembayaran; }
     
-    public List<List<Object>> getHistoryData() {
-        return historyData;
-    }
-    
+    public int getIdPelanggan() { return idPelanggan; }
+    public void setIdPelanggan(int idPelanggan) { this.idPelanggan = idPelanggan; }
+
+    public int getIdPesananBusana() { return idPesananBusana; }
+    public void setIdPesananBusana(int idPesananBusana) { this.idPesananBusana = idPesananBusana; }
+
     public void clear() {
         namaLengkap = null;
         nomorTelepon = null;
@@ -140,28 +145,95 @@ public class DataPesanBusana {
     }
     
     public void save() {
-        List<Object> data = new ArrayList<>();
-        data.add(namaLengkap);
-        data.add(nomorTelepon);
-        data.add(alamatEmail);
-        data.add(alamatPengiriman);
-        data.add(jenisBusana);
-        data.add(modelDesain);
-        data.add(warna);
-        data.add(bahan);
-        data.add(lingkarDada);
-        data.add(lingkarPinggang);
-        data.add(lingkarPinggul);
-        data.add(panjangLengan);
-        data.add(panjangBaju);
-        data.add(tinggiBadan);
-        data.add(lebarBahu);
-        data.add(aplikasiTambahan);
-        data.add(detailKhusus);
-        data.add(kebutuhanKhusus);
-        data.add(tanggalPemakaian);
-        data.add(kisaranBudget);
-        data.add(metodePembayaran);
-        historyData.add(data);
+        
+    }
+
+    public void update() {
+        // Query untuk update data pelanggan
+        String updatePelangganQuery = """
+            UPDATE pelanggan SET 
+                nama_lengkap = ?, 
+                nomor_wa = ?, 
+                email = ?, 
+                alamat = ? 
+            WHERE id_pelanggan = ?
+        """;
+
+        try (
+            Connection conn = Koneksi.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(updatePelangganQuery)
+        ) {
+            stmt.setString(1, namaLengkap);
+            stmt.setString(2, nomorTelepon);
+            stmt.setString(3, alamatEmail);
+            stmt.setString(4, alamatPengiriman);
+            stmt.setInt(5, idPelanggan);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Gagal menyimpan data pelanggan",
+                "Terjadi Kesalahan",
+                JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        // Query untuk update data pesanan busana
+        String updatePesananQuery = """
+            UPDATE pesanan_busana SET
+                jenis_busana = ?, 
+                gambar_model = ?, 
+                warna = ?, 
+                bahan = ?, 
+                ukuran_lingkar_dada = ?, 
+                ukuran_pinggang = ?, 
+                ukuran_pinggul = ?, 
+                panjang_lengan = ?, 
+                panjang_busana = ?, 
+                tinggi_badan = ?, 
+                lebar_bahu = ?, 
+                aplikasi_tambahan = ?, 
+                detail_khusus = ?, 
+                kebutuhan_khusus = ?, 
+                tanggal_perkiraan_jadi = ?, 
+                kisaran_budget = ?, 
+                metode_pembayaran = ?
+            WHERE id_pesanan = ?
+        """;
+
+        try (
+            Connection conn = Koneksi.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(updatePesananQuery)
+        ) {
+            stmt.setString(1, jenisBusana);
+            stmt.setString(2, modelDesain);
+            stmt.setString(3, warna);
+            stmt.setString(4, bahan);
+            stmt.setDouble(5, lingkarDada);
+            stmt.setDouble(6, lingkarPinggang);
+            stmt.setDouble(7, lingkarPinggul);
+            stmt.setDouble(8, panjangLengan);
+            stmt.setDouble(9, panjangBaju);
+            stmt.setDouble(10, tinggiBadan);
+            stmt.setDouble(11, lebarBahu);
+            stmt.setString(12, aplikasiTambahan);
+            stmt.setString(13, detailKhusus);
+            stmt.setString(14, kebutuhanKhusus);
+            stmt.setDate(15, new java.sql.Date(tanggalPemakaian.getTime()));
+            stmt.setDouble(16, kisaranBudget);
+            stmt.setString(17, metodePembayaran);
+            stmt.setInt(18, idPesananBusana);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Gagal menyimpan data pesanan busana",
+                "Terjadi Kesalahan",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 }

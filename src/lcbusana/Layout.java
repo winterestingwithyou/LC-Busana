@@ -13,6 +13,7 @@ import java.awt.CardLayout;
 public class Layout extends javax.swing.JFrame {
     private CardLayout card;
     private String status;
+    private boolean onEdit = false;
     private FormPesanBusana_Main bmain = new FormPesanBusana_Main(this);
     private FormPesanBusana_Ukuran bukuran = new FormPesanBusana_Ukuran(this);
     private FormPesanBusana_Tambahan btambahan = new FormPesanBusana_Tambahan(this);
@@ -136,6 +137,20 @@ public class Layout extends javax.swing.JFrame {
         return this.card;
     }
     
+    /**
+     * @return the onEdit
+     */
+    public boolean isOnEdit() {
+        return onEdit;
+    }
+
+    /**
+     * @param onEdit the onEdit to set
+     */
+    public void setOnEdit(boolean onEdit) {
+        this.onEdit = onEdit;
+    }
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         ubahPanel("pesanan");
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -143,7 +158,7 @@ public class Layout extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ubahPanel("dashboard");      
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     private void komponenBody(){    
         pnlBody.add(new Dashboard(this), "dashboard");
         pnlBody.add(new Pesanan(this), "pesanan");
@@ -176,6 +191,18 @@ public class Layout extends javax.swing.JFrame {
         ptambahan.clear();
         pwaktubiaya.clear();
         datadiri.clear();
+    }
+    
+    public void editPesananBusana(){
+        setStatus("Busana");
+        setOnEdit(true);
+        bmain.isiDataEdit();
+        bukuran.isiDataEdit();
+        btambahan.isiDataEdit();
+        bwaktubiaya.isiDataEdit();
+        datadiri.isiDataEdit();      
+        
+        ubahPanel("bmain");
     }
     
     /**

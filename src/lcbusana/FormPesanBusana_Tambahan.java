@@ -243,9 +243,6 @@ public class FormPesanBusana_Tambahan extends javax.swing.JPanel {
                 data.setAplikasiTambahan(aplikasiTambahan);
                 data.setDetailKhusus(detailKhusus);
                 data.setKebutuhanKhusus(kebutuhanKhusus);
-        
-                //Menghitung biaya berdasarkan field yang dipilih
-//                hitungBiaya();
                 
                 // Lanjut ke halaman berikutnya dengan mengubah panel
                 main.ubahPanel("bwaktubiaya");
@@ -256,9 +253,6 @@ public class FormPesanBusana_Tambahan extends javax.swing.JPanel {
             data.setAplikasiTambahan(aplikasiTambahan);
             data.setDetailKhusus(detailKhusus);
             data.setKebutuhanKhusus(kebutuhanKhusus);
-
-            //Menghitung biaya berdasarkan field yang dipilih
-//            hitungBiaya();
                 
             // Lanjut ke halaman berikutnya dengan mengubah panel
             main.ubahPanel("bwaktubiaya");
@@ -271,17 +265,12 @@ public class FormPesanBusana_Tambahan extends javax.swing.JPanel {
         txtKebutuhan.setText(null);
     }
     
-    private void hitungBiaya(){
+    public void isiDataEdit(){
         DataPesanBusana data = DataPesanBusana.getInstance();
         
-        // Menghitung harga berdasarkan detail tambahan
-        String[] daftarTambahan = {data.getAplikasiTambahan(), data.getDetailKhusus(), data.getKebutuhanKhusus()};
-        
-        for(String tambahan : daftarTambahan){
-            if(!tambahan.isEmpty()){
-                data.setKisaranBudget(data.getKisaranBudget() + 50000);
-            }
-        }
+        txtApk.setText(data.getAplikasiTambahan());
+        txtDetail.setText(data.getDetailKhusus());
+        txtKebutuhan.setText(data.getKebutuhanKhusus());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

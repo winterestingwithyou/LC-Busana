@@ -150,6 +150,7 @@ public class Dashboard extends javax.swing.JPanel {
         }
         
         main.setStatus(null);
+        main.setOnEdit(false);
     }//GEN-LAST:event_formComponentShown
 
 
