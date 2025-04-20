@@ -4,18 +4,26 @@
  */
 package database;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Acer
  */
 public class DataPermakBusana {
+
     private static DataPermakBusana instance;
-    private final List<List<Object>> historyData = new ArrayList<>();
-    
+
+    private int idPelanggan;
+    private int idPermakBusana;
     private String namaLengkap;
     private String nomorTelepon;
     private String alamatEmail;    
@@ -83,9 +91,11 @@ public class DataPermakBusana {
     public String getMetodePembayaran() { return metodePembayaran; }
     public void setMetodePembayaran(String metodePembayaran) { this.metodePembayaran = metodePembayaran; }
     
-    public List<List<Object>> getHistoryData() {
-        return historyData;
-    }
+    public int getIdPelanggan() { return idPelanggan; }
+    public void setIdPelanggan(int idPelanggan) { this.idPelanggan = idPelanggan; }
+
+    public int getIdPermakBusana() { return idPermakBusana; }
+    public void setIdPermakBusana(int idPermakBusana) { this.idPermakBusana = idPermakBusana; }
     
     public void clear() {
         namaLengkap = null;
@@ -105,21 +115,44 @@ public class DataPermakBusana {
     }
     
     public void save() {
-        List<Object> data = new ArrayList<>();
-        data.add(namaLengkap);
-        data.add(nomorTelepon);
-        data.add(alamatEmail);
-        data.add(alamatPengiriman);
-        data.add(jenisPakaian);
-        data.add(bahanPakaian);
-        data.add(jumlahPakaian);
-        data.add(jenisPerbaikan);
-        data.add(ukuranSetelahDiperbaiki);
-        data.add(fotoPakaian);
-        data.add(deskripsiTambahan);
-        data.add(tanggalPengambilan);
-        data.add(estimasiBiaya);
-        data.add(metodePembayaran);
-        historyData.add(data);
+        try (Connection conn = Koneksi.getConnection()) {
+            conn.setAutoCommit(false);
+            
+            // 1. Simpan ke tabel pelanggan
+            String sql = "INSERT INTO pelanggan (nama_lengkap, nomor_wa, email, alamat) VALUES (?, ?, ?, ?)";
+            PreparedStatement psPelanggan = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            psPelanggan.setString(1, namaLengkap);
+            psPelanggan.setString(2, nomorTelepon);
+            psPelanggan.setString(3, alamatEmail);
+            psPelanggan.setString(4, alamatPengiriman);
+            psPelanggan.executeUpdate();
+
+            //2. ambil id_pelanggan baru
+            ResultSet rsPelanggan = psPelanggan.getGeneratedKeys();
+            if (rsPelanggan.next()) {
+                setIdPelanggan(rsPelanggan.getInt(1));
+            }
+
+            //3. Simpan ke tabel permak_busana
+            String sqlPermak = "INSERT INTO pesanan_permak (id_pelanggan, jenis_busana, bahan, jumlah, jenis_permak, ukuran_sesudah, foto_pakaian, deskripsi_tambahan, tanggal_selesai, kisaran_biaya, metode_pembayaran) " +
+                               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement psPermak = conn.prepareStatement(sqlPermak);
+            psPermak.setInt(1, idPelanggan);
+            psPermak.setString(2, jenisPakaian);
+            psPermak.setString(3, bahanPakaian);
+            psPermak.setInt(4, jumlahPakaian);
+            psPermak.setString(5, jenisPerbaikan);
+            psPermak.setDouble(6, ukuranSetelahDiperbaiki);
+            psPermak.setString(7, fotoPakaian); // Jika berupa path/URL
+            psPermak.setString(8, deskripsiTambahan);
+            psPermak.setDate(9, new java.sql.Date(tanggalPengambilan.getTime()));
+            psPermak.setDouble(10, estimasiBiaya);
+            psPermak.setString(11, metodePembayaran);
+            psPermak.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Gagal Menyimpan Data", "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
