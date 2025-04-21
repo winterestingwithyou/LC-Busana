@@ -5,7 +5,9 @@
 package database;
 
 import java.sql.Connection;
+import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -145,7 +147,52 @@ public class DataPesanBusana {
     }
     
     public void save() {
-        
+         try (Connection conn = Koneksi.getConnection()) {
+            conn.setAutoCommit(false);
+            
+            // 1. Simpan ke tabel pelanggan
+            String sql = "INSERT INTO pelanggan (nama_lengkap, nomor_wa, email, alamat) VALUES (?, ?, ?, ?)";
+            PreparedStatement psPelanggan = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            psPelanggan.setString(1, namaLengkap);
+            psPelanggan.setString(2, nomorTelepon);
+            psPelanggan.setString(3, alamatEmail);
+            psPelanggan.setString(4, alamatPengiriman);
+            psPelanggan.executeUpdate();
+
+            //2. ambil id_pelanggan baru
+            ResultSet rsPelanggan = psPelanggan.getGeneratedKeys();
+            if (rsPelanggan.next()) {
+                setIdPelanggan(rsPelanggan.getInt(1));
+            }
+
+            //3. Simpan ke tabel pesan_busana
+            String sqlPesanan = "INSERT INTO pesanan_busana (id_pelanggan, jenis_busana, gambar_model, warna, bahan, ukuran_lingkar_dada, ukuran_pinggang, ukuran_pinggul, panjang_lengan, panjang_busana, tinggi_badan, lebar_bahu, aplikasi_tambahan, detail_khusus, kebutuhan_khusus, tanggal_perkiraan_jadi, kisaran_budget, metode_pembayaran) " +
+                               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement psPesan = conn.prepareStatement(sqlPesanan);
+            psPesan.setInt(1, idPelanggan);
+            psPesan.setString(2, jenisBusana);
+            psPesan.setString(3, modelDesain);
+            psPesan.setString(4, warna);
+            psPesan.setString(5, bahan);
+            psPesan.setDouble(6, lingkarDada);
+            psPesan.setDouble(7, lingkarPinggang); 
+            psPesan.setDouble(8, lingkarPinggul);
+            psPesan.setDouble(9, panjangLengan);
+            psPesan.setDouble(10, panjangBaju); 
+            psPesan.setDouble(11, tinggiBadan);
+            psPesan.setDouble(12, lebarBahu);
+            psPesan.setString(13, aplikasiTambahan); 
+            psPesan.setString(14, detailKhusus);
+            psPesan.setString(15, kebutuhanKhusus);
+            psPesan.setDate(16, new java.sql.Date(tanggalPemakaian.getTime()));
+            psPesan.setDouble(17, kisaranBudget);
+            psPesan.setString(18, metodePembayaran);
+            psPesan.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Gagal Menyimpan Data", "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void update() {
