@@ -4,6 +4,7 @@
  */
 package lcbusana;
 
+import database.DataPermakBusana;
 import database.Koneksi;
 import decorationcomponent.GradientBackgroundRowRenderer;
 import decorationcomponent.tableactioncell.TableActionCellEditor;
@@ -29,6 +30,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import tools.FormatData;
 
 /**
  *
@@ -184,7 +186,34 @@ public class Pesanan_Permak extends javax.swing.JPanel {
     }
     
     private void editData(int row){
+        //Mengambil nilai dari baris dan menyimpannya di Array
+        int columnCount = tblData.getColumnCount();
+        ArrayList<String> rowData = new ArrayList<>();
+
+        for (int col = 0; col < columnCount - 1; col++) {
+            rowData.add(tblData.getValueAt(row, col).toString());
+        }
         
+        //Mengisi Nilai dari array tadi ke DataPesanBusana
+        DataPermakBusana dataPermak = DataPermakBusana.getInstance();
+        dataPermak.setNamaLengkap(rowData.get(0));
+        dataPermak.setNomorTelepon(rowData.get(1));
+        dataPermak.setAlamatEmail(rowData.get(2));
+        dataPermak.setAlamatPengiriman(rowData.get(3));
+        dataPermak.setJenisPakaian(rowData.get(4));
+        dataPermak.setBahanPakaian(rowData.get(5));
+        dataPermak.setJumlahPakaian(Integer.parseInt(rowData.get(6)));
+        dataPermak.setJenisPerbaikan(rowData.get(7));
+        dataPermak.setUkuranSetelahDiperbaiki(Double.parseDouble(rowData.get(8)));
+        dataPermak.setFotoPakaian(rowData.get(9));
+        dataPermak.setDeskripsiTambahan(rowData.get(10));
+        dataPermak.setTanggalPengambilan(FormatData.toDate(rowData.get(11)));
+        dataPermak.setEstimasiBiaya(Double.parseDouble(rowData.get(12)));
+        dataPermak.setMetodePembayaran(rowData.get(13));
+        dataPermak.setIdPelanggan(loadIdPelangganbyEmail(dataPermak.getAlamatEmail()));
+        dataPermak.setIdPermakBusana(loadIdPermakbyIdPelanggan(dataPermak.getIdPelanggan()));
+        
+        main.editPesananPermak();
     }
     
     private void deleteData(int row){
@@ -203,6 +232,52 @@ public class Pesanan_Permak extends javax.swing.JPanel {
         struk.setVisible(true);
     }
 
+    private Integer loadIdPermakbyIdPelanggan(int idPelanggan){
+        String query = "SELECT id_permak FROM pesanan_permak WHERE id_pelanggan = ?";
+        
+        try (
+            Connection conn = Koneksi.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+        ) {
+            stmt.setInt(1, idPelanggan);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_permak");
+                } else {
+                    return null; // Tidak ditemukan
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    private Integer loadIdPelangganbyEmail(String email){
+        String query = "SELECT id_pelanggan FROM pelanggan WHERE email = ?";
+        
+        try (
+            Connection conn = Koneksi.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+        ) {
+            stmt.setString(1, email);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_pelanggan");
+                } else {
+                    return null; // Tidak ditemukan
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
     private void aturLookAndFeel(){
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");

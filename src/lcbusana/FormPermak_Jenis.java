@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.util.List;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -303,23 +304,6 @@ public class FormPermak_Jenis extends javax.swing.JPanel {
         return false;
     }
     
-    private void hitungBiaya() {         
-        DataPermakBusana data = DataPermakBusana.getInstance();
-        
-        // Iterasi semua komponen dalam panel untuk menghitung checkbox yang dipilih
-        for (Component comp : panelCheckBox.getComponents()) {
-            if (comp instanceof JCheckBox) {
-                JCheckBox checkbox = (JCheckBox) comp;
-                if (checkbox.isSelected()) {
-                    // Harga + 50.000 untuk setiap jenis permak yang dipilih
-                    data.setEstimasiBiaya(data.getEstimasiBiaya() + 50000);
-                }
-            }  
-        }
-        //Mengalikan harga permak dengan jumlah Pakaian
-        data.setEstimasiBiaya(data.getEstimasiBiaya() * data.getJumlahPakaian());
-    }
-    
     private void btnSebelumnyaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSebelumnyaActionPerformed
         // Pindah ke halaman Sebelumnya Form Permak
         main.ubahPanel("pmain");
@@ -347,6 +331,25 @@ public class FormPermak_Jenis extends javax.swing.JPanel {
             if (comp instanceof JCheckBox) {
                 JCheckBox checkbox = (JCheckBox) comp;
                 checkbox.setSelected(false);
+            }
+        }
+    }
+    
+    void isiDataEdit() {
+        DataPermakBusana data = DataPermakBusana.getInstance();
+        txtUkuran.setText(String.valueOf((int) data.getUkuranSetelahDiperbaiki()));
+        
+        //Iterasi semua komponen, jika dipilih maka akan dicentang
+        List<String> daftarJenisPerbaikan = Arrays.asList(data.getJenisPerbaikan().split("\\s*,\\s*"));
+        
+        for (Component comp : panelCheckBox.getComponents()) {
+            if (comp instanceof JCheckBox) {
+                JCheckBox checkBox = (JCheckBox) comp;
+                String text = checkBox.getText().trim();
+
+                if (daftarJenisPerbaikan.contains(text)) {
+                    checkBox.setSelected(true);
+                }
             }
         }
     }

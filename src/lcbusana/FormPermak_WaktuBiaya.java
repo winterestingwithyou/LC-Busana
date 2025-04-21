@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import tools.Selector;
 
 /**
  *
@@ -281,15 +282,23 @@ public class FormPermak_WaktuBiaya extends javax.swing.JPanel {
             metode = "DP";
         }
         
-        //Perbandingan tanggal yang dipilih dengan sekarang
+        // Konversi tanggal ke LocalDate
         LocalDate tanggalDipilih = tanggal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate hariIni = LocalDate.now();
-        
-        // Validasi apakah ada yang kosong
-        if (tanggalDipilih.equals(hariIni) || tanggalDipilih.isBefore(hariIni) || biaya <= 0 || metode.equals("")) {
+
+        // Validasi input kosong (biaya dan metode)
+        if (biaya <= 0 || metode.equals("")) {
             JOptionPane.showMessageDialog(this, "Semua input harus diisi sebelum melanjutkan!", "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
         } 
+        
+        // Validasi tanggal hanya jika bukan dalam mode edit
+        if (!main.isOnEdit()) {
+            if (tanggalDipilih.equals(hariIni) || tanggalDipilih.isBefore(hariIni)) {
+                JOptionPane.showMessageDialog(this, "Tanggal harus setelah hari ini!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
         
         // Simpan data
         DataPermakBusana data = DataPermakBusana.getInstance();
@@ -317,7 +326,12 @@ public class FormPermak_WaktuBiaya extends javax.swing.JPanel {
     }//GEN-LAST:event_txtBiayaKeyTyped
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-//        tampilkanBiaya();
+        //disable beberapa field jika sedang mengedit
+        if(main.isOnEdit()){
+            jsTanggal.setEnabled(false);
+        } else {
+            jsTanggal.setEnabled(true);
+        }
     }//GEN-LAST:event_formComponentShown
 
     public void clear(){
@@ -326,10 +340,11 @@ public class FormPermak_WaktuBiaya extends javax.swing.JPanel {
         metode.clearSelection();
     }
     
-    private void tampilkanBiaya(){
+    void isiDataEdit() {
         DataPermakBusana data = DataPermakBusana.getInstance();
-        String biaya = String.valueOf((long) data.getEstimasiBiaya());
-        txtBiaya.setText(biaya);
+        jsTanggal.setValue(data.getTanggalPengambilan());
+        txtBiaya.setText(Integer.toString((int) data.getEstimasiBiaya()));
+        Selector.selectRadioByActionCommand(metode, data.getMetodePembayaran());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

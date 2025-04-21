@@ -288,7 +288,7 @@ public class FormDataDiri extends javax.swing.JPanel {
             //Update Data
             switch(main.getStatus()){
                 case "Busana" -> updateDataPesanBusana(nama, noWa, email, alamat);            
-                case "Permak" -> {}
+                case "Permak" -> updateDataPermakBusana(nama, noWa, email, alamat);
             }
             
             // Selesai Edit, kembali kembali ke Pesanan
@@ -333,6 +333,15 @@ public class FormDataDiri extends javax.swing.JPanel {
     
     private void updateDataPesanBusana(String nama, String no, String email, String alamat){
         DataPesanBusana data= DataPesanBusana.getInstance();
+        data.setNamaLengkap(nama);
+        data.setNomorTelepon(no);
+        data.setAlamatEmail(email);
+        data.setAlamatPengiriman(alamat);
+        data.update();
+    }
+    
+    private void updateDataPermakBusana(String nama, String no, String email, String alamat){
+        DataPermakBusana data= DataPermakBusana.getInstance();
         data.setNamaLengkap(nama);
         data.setNomorTelepon(no);
         data.setAlamatEmail(email);
@@ -407,8 +416,16 @@ public class FormDataDiri extends javax.swing.JPanel {
         txtNoWA.setText(null);
     }
     
-    public void isiDataEdit(){
+    public void isiDataEditPesanBusana(){
         DataPesanBusana data = DataPesanBusana.getInstance();
+        txtAlamat.setText(data.getAlamatPengiriman());
+        txtEmail.setText(data.getAlamatEmail());
+        txtNama.setText(data.getNamaLengkap());
+        txtNoWA.setText(data.getNomorTelepon());
+    }
+    
+    void isiDataEditPermakBusana() {
+        DataPermakBusana data = DataPermakBusana.getInstance();
         txtAlamat.setText(data.getAlamatPengiriman());
         txtEmail.setText(data.getAlamatEmail());
         txtNama.setText(data.getNamaLengkap());
@@ -432,8 +449,4 @@ public class FormDataDiri extends javax.swing.JPanel {
     private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtNoWA;
     // End of variables declaration//GEN-END:variables
-
-    private boolean isValidEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

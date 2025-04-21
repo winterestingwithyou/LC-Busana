@@ -240,6 +240,12 @@ public class FormPermak_Tambahan extends javax.swing.JPanel {
         gambarBaju = "";
         txtDeskripsi.setText(null);
     }
+    
+    void isiDataEdit() {
+        DataPermakBusana data = DataPermakBusana.getInstance();
+        gambarBaju = data.getFotoPakaian();
+        txtDeskripsi.setText(data.getDeskripsiTambahan());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBerikutnya;

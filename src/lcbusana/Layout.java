@@ -12,7 +12,7 @@ import java.awt.CardLayout;
  */
 public class Layout extends javax.swing.JFrame {
     private CardLayout card;
-    private String status;
+    private String status; //Permak or Busana
     private boolean onEdit = false;
     private FormPesanBusana_Main bmain = new FormPesanBusana_Main(this);
     private FormPesanBusana_Ukuran bukuran = new FormPesanBusana_Ukuran(this);
@@ -200,9 +200,21 @@ public class Layout extends javax.swing.JFrame {
         bukuran.isiDataEdit();
         btambahan.isiDataEdit();
         bwaktubiaya.isiDataEdit();
-        datadiri.isiDataEdit();      
+        datadiri.isiDataEditPesanBusana();      
         
         ubahPanel("bmain");
+    }
+    
+    public void editPesananPermak() {
+        setStatus("Permak");
+        setOnEdit(true);
+        pmain.isiDataEdit();
+        pjenis.isiDataEdit();
+        ptambahan.isiDataEdit();
+        pwaktubiaya.isiDataEdit();
+        datadiri.isiDataEditPermakBusana();      
+        
+        ubahPanel("pmain");
     }
     
     /**

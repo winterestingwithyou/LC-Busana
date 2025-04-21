@@ -292,6 +292,14 @@ public class FormPermak_Main extends javax.swing.JPanel {
         spJmlPermak.setValue(0);
     }
 
+    void isiDataEdit() {
+        DataPermakBusana data = DataPermakBusana.getInstance();
+        cbJenisBusanaPermak.setSelectedItem(data.getJenisPakaian());
+        txtBahanPermak.setText(data.getBahanPakaian());
+        spJmlPermak.setValue(data.getJumlahPakaian());
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatalPermak;
     private javax.swing.JButton btnLanjut;
@@ -308,5 +316,4 @@ public class FormPermak_Main extends javax.swing.JPanel {
     private javax.swing.JSpinner spJmlPermak;
     private javax.swing.JTextField txtBahanPermak;
     // End of variables declaration//GEN-END:variables
-
 }

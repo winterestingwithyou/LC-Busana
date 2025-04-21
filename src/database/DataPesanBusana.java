@@ -173,7 +173,7 @@ public class DataPesanBusana {
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,
-                "Gagal menyimpan data pelanggan",
+                "Gagal memperbarui data pelanggan",
                 "Terjadi Kesalahan",
                 JOptionPane.ERROR_MESSAGE
             );
@@ -230,7 +230,7 @@ public class DataPesanBusana {
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,
-                "Gagal menyimpan data pesanan busana",
+                "Gagal memperbarui data pesanan busana",
                 "Terjadi Kesalahan",
                 JOptionPane.ERROR_MESSAGE
             );

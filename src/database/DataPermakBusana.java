@@ -153,4 +153,79 @@ public class DataPermakBusana {
             JOptionPane.showMessageDialog(null, "Gagal Menyimpan Data", "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public void update() {
+        // Query untuk update data pelanggan
+        String updatePelangganQuery = """
+            UPDATE pelanggan SET 
+                nama_lengkap = ?, 
+                nomor_wa = ?, 
+                email = ?, 
+                alamat = ? 
+            WHERE id_pelanggan = ?
+        """;
+
+        try (
+            Connection conn = Koneksi.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(updatePelangganQuery)
+        ) {
+            stmt.setString(1, namaLengkap);
+            stmt.setString(2, nomorTelepon);
+            stmt.setString(3, alamatEmail);
+            stmt.setString(4, alamatPengiriman);
+            stmt.setInt(5, idPelanggan);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Gagal memperbarui data pelanggan",
+                "Terjadi Kesalahan",
+                JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        // Query untuk update data pesanan busana
+        String updatePermakQuery = """
+            UPDATE pesanan_permak SET
+                jenis_busana = ?, 
+                bahan = ?, 
+                jumlah = ?, 
+                jenis_permak = ?, 
+                ukuran_sesudah = ?, 
+                foto_pakaian = ?, 
+                deskripsi_tambahan = ?, 
+                tanggal_selesai = ?, 
+                kisaran_biaya = ?, 
+                metode_pembayaran = ?
+            WHERE id_permak = ?
+        """;
+
+        try (
+            Connection conn = Koneksi.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(updatePermakQuery)
+        ) {
+            stmt.setString(1, jenisPakaian);
+            stmt.setString(2, bahanPakaian);
+            stmt.setInt(3, jumlahPakaian);
+            stmt.setString(4, jenisPerbaikan);
+            stmt.setString(5, String.valueOf(ukuranSetelahDiperbaiki));
+            stmt.setString(6, fotoPakaian);
+            stmt.setString(7, deskripsiTambahan);
+            stmt.setDate(8, new java.sql.Date(tanggalPengambilan.getTime()));
+            stmt.setDouble(9, estimasiBiaya);
+            stmt.setString(10, metodePembayaran);
+            stmt.setInt(11, idPermakBusana);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Gagal memperbaru data permak busana",
+                "Terjadi Kesalahan",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
 }
