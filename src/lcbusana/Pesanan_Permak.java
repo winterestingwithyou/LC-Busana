@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -217,7 +218,38 @@ public class Pesanan_Permak extends javax.swing.JPanel {
     }
     
     private void deleteData(int row){
-        
+        int pilihan = JOptionPane.showConfirmDialog(this,
+            "Apakah Anda yakin ingin menghapus data ini?",
+            "Konfirmasi Hapus",
+            JOptionPane.YES_NO_OPTION);
+
+        if (pilihan == JOptionPane.YES_OPTION) {
+            try {
+                // Ambil email dari kolom index ke-2
+                String email = tblData.getValueAt(row, 2).toString();
+                
+                String query = "DELETE FROM pelanggan WHERE email = ?";
+
+                try (Connection conn = Koneksi.getConnection();
+                     PreparedStatement stmt = conn.prepareStatement(query)) {
+
+                    stmt.setString(1, email); // Set parameter email
+                    int affectedRows = stmt.executeUpdate();
+
+                    if (affectedRows > 0) {
+                        // Hapus baris dari tabel jika query berhasil
+                        tampilkanDataPermak();
+                        JOptionPane.showMessageDialog(this, "Data berhasil dihapus.");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Data tidak ditemukan atau gagal dihapus.", "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
     
     private void viewData(int row){
