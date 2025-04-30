@@ -4,7 +4,10 @@
  */
 package lcbusana;
 
+import decorationcomponent.RoundedImageButton;
 import java.awt.CardLayout;
+import javax.swing.UIManager;
+import lcbusana.auth.FormAuth;
 
 /**
  *
@@ -46,8 +49,10 @@ public class Layout extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         pnlNavigasi = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnHome = new javax.swing.JButton();
+        btnPesanan = new javax.swing.JButton();
+        btnProduk = new javax.swing.JButton();
+        btnProfile = new RoundedImageButton();
         pnlBody = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -59,16 +64,18 @@ public class Layout extends javax.swing.JFrame {
         pnlNavigasi.setBackground(new java.awt.Color(207, 183, 146));
         pnlNavigasi.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setBackground(new java.awt.Color(207, 183, 146));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1.setText("Home");
-        jButton1.setBorder(null);
-        jButton1.setBorderPainted(false);
-        jButton1.setFocusPainted(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnHome.setBackground(new java.awt.Color(207, 183, 146));
+        btnHome.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnHome.setForeground(new java.awt.Color(0, 0, 0));
+        btnHome.setText("Home");
+        btnHome.setBorder(null);
+        btnHome.setBorderPainted(false);
+        btnHome.setContentAreaFilled(false);
+        btnHome.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHome.setFocusPainted(false);
+        btnHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnHomeActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -77,20 +84,21 @@ public class Layout extends javax.swing.JFrame {
         gridBagConstraints.ipady = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
-        pnlNavigasi.add(jButton1, gridBagConstraints);
+        pnlNavigasi.add(btnHome, gridBagConstraints);
 
-        jButton2.setBackground(new java.awt.Color(207, 183, 146));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(0, 0, 0));
-        jButton2.setText("Pesanan");
-        jButton2.setBorder(null);
-        jButton2.setBorderPainted(false);
-        jButton2.setFocusPainted(false);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnPesanan.setBackground(new java.awt.Color(207, 183, 146));
+        btnPesanan.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnPesanan.setForeground(new java.awt.Color(0, 0, 0));
+        btnPesanan.setText("Pesanan");
+        btnPesanan.setBorder(null);
+        btnPesanan.setBorderPainted(false);
+        btnPesanan.setContentAreaFilled(false);
+        btnPesanan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPesanan.setFocusPainted(false);
+        btnPesanan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnPesananActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -98,9 +106,50 @@ public class Layout extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.ipady = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 70);
-        pnlNavigasi.add(jButton2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        pnlNavigasi.add(btnPesanan, gridBagConstraints);
+
+        btnProduk.setBackground(new java.awt.Color(207, 183, 146));
+        btnProduk.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnProduk.setForeground(new java.awt.Color(0, 0, 0));
+        btnProduk.setText("Produk");
+        btnProduk.setBorder(null);
+        btnProduk.setBorderPainted(false);
+        btnProduk.setContentAreaFilled(false);
+        btnProduk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnProduk.setFocusPainted(false);
+        btnProduk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProdukActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.ipady = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 30);
+        pnlNavigasi.add(btnProduk, gridBagConstraints);
+
+        btnProfile.setBackground(new java.awt.Color(207, 183, 146));
+        btnProfile.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnProfile.setForeground(new java.awt.Color(0, 0, 0));
+        btnProfile.setBorder(null);
+        btnProfile.setBorderPainted(false);
+        btnProfile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnProfile.setFocusPainted(false);
+        btnProfile.setMinimumSize(new java.awt.Dimension(40, 40));
+        btnProfile.setPreferredSize(new java.awt.Dimension(60, 60));
+        btnProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProfileActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(20, 10, 20, 30);
+        pnlNavigasi.add(btnProfile, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -151,13 +200,22 @@ public class Layout extends javax.swing.JFrame {
         this.onEdit = onEdit;
     }
     
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesananActionPerformed
         ubahPanel("pesanan");
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnPesananActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         ubahPanel("dashboard");      
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnHomeActionPerformed
+
+    private void btnProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdukActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnProdukActionPerformed
+
+    private void btnProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfileActionPerformed
+        dispose();
+        new FormAuth().setVisible(true);
+    }//GEN-LAST:event_btnProfileActionPerformed
     
     private void komponenBody(){    
         pnlBody.add(new Dashboard(this), "dashboard");
@@ -253,8 +311,10 @@ public class Layout extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnHome;
+    private javax.swing.JButton btnPesanan;
+    private javax.swing.JButton btnProduk;
+    private javax.swing.JButton btnProfile;
     private javax.swing.JPanel pnlBody;
     private javax.swing.JPanel pnlNavigasi;
     // End of variables declaration//GEN-END:variables

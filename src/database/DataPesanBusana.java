@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -146,8 +145,8 @@ public class DataPesanBusana {
         metodePembayaran = null;
     }
     
-    public void save() {
-         try (Connection conn = Koneksi.getConnection()) {
+    public void save() throws SQLException {
+        try (Connection conn = Koneksi.getConnection()) {
             conn.setAutoCommit(false);
             
             // 1. Simpan ke tabel pelanggan
@@ -189,14 +188,10 @@ public class DataPesanBusana {
             psPesan.setString(18, metodePembayaran);
             psPesan.executeUpdate();
             conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Gagal Menyimpan Data", "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void update() {
-        // Query untuk update data pelanggan
+    public void update() throws SQLException {
         String updatePelangganQuery = """
             UPDATE pelanggan SET 
                 nama_lengkap = ?, 
@@ -206,28 +201,6 @@ public class DataPesanBusana {
             WHERE id_pelanggan = ?
         """;
 
-        try (
-            Connection conn = Koneksi.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(updatePelangganQuery)
-        ) {
-            stmt.setString(1, namaLengkap);
-            stmt.setString(2, nomorTelepon);
-            stmt.setString(3, alamatEmail);
-            stmt.setString(4, alamatPengiriman);
-            stmt.setInt(5, idPelanggan);
-
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null,
-                "Gagal memperbarui data pelanggan",
-                "Terjadi Kesalahan",
-                JOptionPane.ERROR_MESSAGE
-            );
-            return;
-        }
-
-        // Query untuk update data pesanan busana
         String updatePesananQuery = """
             UPDATE pesanan_busana SET
                 jenis_busana = ?, 
@@ -250,37 +223,41 @@ public class DataPesanBusana {
             WHERE id_pesanan = ?
         """;
 
-        try (
-            Connection conn = Koneksi.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(updatePesananQuery)
-        ) {
-            stmt.setString(1, jenisBusana);
-            stmt.setString(2, modelDesain);
-            stmt.setString(3, warna);
-            stmt.setString(4, bahan);
-            stmt.setDouble(5, lingkarDada);
-            stmt.setDouble(6, lingkarPinggang);
-            stmt.setDouble(7, lingkarPinggul);
-            stmt.setDouble(8, panjangLengan);
-            stmt.setDouble(9, panjangBaju);
-            stmt.setDouble(10, tinggiBadan);
-            stmt.setDouble(11, lebarBahu);
-            stmt.setString(12, aplikasiTambahan);
-            stmt.setString(13, detailKhusus);
-            stmt.setString(14, kebutuhanKhusus);
-            stmt.setDate(15, new java.sql.Date(tanggalPemakaian.getTime()));
-            stmt.setDouble(16, kisaranBudget);
-            stmt.setString(17, metodePembayaran);
-            stmt.setInt(18, idPesananBusana);
+        try (Connection conn = Koneksi.getConnection()) {
+            conn.setAutoCommit(false);
 
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null,
-                "Gagal memperbarui data pesanan busana",
-                "Terjadi Kesalahan",
-                JOptionPane.ERROR_MESSAGE
-            );
+            try (PreparedStatement stmtPelanggan = conn.prepareStatement(updatePelangganQuery)) {
+                stmtPelanggan.setString(1, namaLengkap);
+                stmtPelanggan.setString(2, nomorTelepon);
+                stmtPelanggan.setString(3, alamatEmail);
+                stmtPelanggan.setString(4, alamatPengiriman);
+                stmtPelanggan.setInt(5, idPelanggan);
+                stmtPelanggan.executeUpdate();
+            }
+
+            try (PreparedStatement stmtPesanan = conn.prepareStatement(updatePesananQuery)) {
+                stmtPesanan.setString(1, jenisBusana);
+                stmtPesanan.setString(2, modelDesain);
+                stmtPesanan.setString(3, warna);
+                stmtPesanan.setString(4, bahan);
+                stmtPesanan.setDouble(5, lingkarDada);
+                stmtPesanan.setDouble(6, lingkarPinggang);
+                stmtPesanan.setDouble(7, lingkarPinggul);
+                stmtPesanan.setDouble(8, panjangLengan);
+                stmtPesanan.setDouble(9, panjangBaju);
+                stmtPesanan.setDouble(10, tinggiBadan);
+                stmtPesanan.setDouble(11, lebarBahu);
+                stmtPesanan.setString(12, aplikasiTambahan);
+                stmtPesanan.setString(13, detailKhusus);
+                stmtPesanan.setString(14, kebutuhanKhusus);
+                stmtPesanan.setDate(15, new java.sql.Date(tanggalPemakaian.getTime()));
+                stmtPesanan.setDouble(16, kisaranBudget);
+                stmtPesanan.setString(17, metodePembayaran);
+                stmtPesanan.setInt(18, idPesananBusana);
+                stmtPesanan.executeUpdate();
+            }
+
+            conn.commit();
         }
     }
 }

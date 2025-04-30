@@ -250,7 +250,7 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
 
         btnberikut.setBackground(new java.awt.Color(207, 183, 146));
         btnberikut.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnberikut.setText("Berikutnya >");
+        btnberikut.setText("Selesai");
         btnberikut.setBorderPainted(false);
         btnberikut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

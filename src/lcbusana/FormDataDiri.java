@@ -15,7 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
-
+import java.sql.SQLException;
 
 /**
  *
@@ -285,26 +285,23 @@ public class FormDataDiri extends javax.swing.JPanel {
         
         //Cek Apakah sedang mengedit
         if(main.isOnEdit()){
-            //Update Data
             switch(main.getStatus()){
                 case "Busana" -> updateDataPesanBusana(nama, noWa, email, alamat);            
                 case "Permak" -> updateDataPermakBusana(nama, noWa, email, alamat);
-            }
+            }          
             
             // Selesai Edit, kembali kembali ke Pesanan
-            main.ubahPanel("pesanan");
+             main.ubahPanel("pesanan");
         } else {
-            // Simpan data
             switch(main.getStatus()){
                 case "Busana" -> tambahDataPesanBusana(nama, noWa, email, alamat);            
                 case "Permak" -> tambahDataPermakBusana(nama, noWa, email, alamat);
-            }
+            } 
             
             // Selesai, kembali ke form dashboatd
-            main.ubahPanel("dashboard");
+            main.ubahPanel("dashboard"); 
         }
     }//GEN-LAST:event_btnSelesaiActionPerformed
-
 
     private void btnSebelumnyaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSebelumnyaActionPerformed
         switch(main.getStatus()){
@@ -313,16 +310,23 @@ public class FormDataDiri extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSebelumnyaActionPerformed
 
-    private void tambahDataPesanBusana(String nama, String no, String email, String alamat){        
-        DataPesanBusana data= DataPesanBusana.getInstance();
-        data.setNamaLengkap(nama);
-        data.setNomorTelepon(no);
-        data.setAlamatEmail(email);
-        data.setAlamatPengiriman(alamat);
-        data.save();
+    private boolean tambahDataPesanBusana(String nama, String no, String email, String alamat) {        
+        try {
+            DataPesanBusana data= DataPesanBusana.getInstance();
+            data.setNamaLengkap(nama);
+            data.setNomorTelepon(no);
+            data.setAlamatEmail(email);
+            data.setAlamatPengiriman(alamat);
+            data.save();
+            
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal Menyimpan Data \n" + e, "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
     
-    private void tambahDataPermakBusana(String nama, String no, String email, String alamat){        
+    private void tambahDataPermakBusana(String nama, String no, String email, String alamat) {        
         DataPermakBusana data = DataPermakBusana.getInstance();
         data.setNamaLengkap(nama);
         data.setNomorTelepon(no);
@@ -331,16 +335,23 @@ public class FormDataDiri extends javax.swing.JPanel {
         data.save();
     }
     
-    private void updateDataPesanBusana(String nama, String no, String email, String alamat){
-        DataPesanBusana data= DataPesanBusana.getInstance();
-        data.setNamaLengkap(nama);
-        data.setNomorTelepon(no);
-        data.setAlamatEmail(email);
-        data.setAlamatPengiriman(alamat);
-        data.update();
+    private boolean updateDataPesanBusana(String nama, String no, String email, String alamat) {
+        try {
+            DataPesanBusana data= DataPesanBusana.getInstance();
+            data.setNamaLengkap(nama);
+            data.setNomorTelepon(no);
+            data.setAlamatEmail(email);
+            data.setAlamatPengiriman(alamat);
+            data.update();
+            
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal Memperbarui Data \n" + e, "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
     
-    private void updateDataPermakBusana(String nama, String no, String email, String alamat){
+    private void updateDataPermakBusana(String nama, String no, String email, String alamat) {
         DataPermakBusana data= DataPermakBusana.getInstance();
         data.setNamaLengkap(nama);
         data.setNomorTelepon(no);
