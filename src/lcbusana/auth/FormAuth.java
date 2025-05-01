@@ -4,6 +4,7 @@
  */
 package lcbusana.auth;
 
+import decorationcomponent.BackgroundPanel;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -18,7 +19,6 @@ import session.Auth;
  */
 public class FormAuth extends javax.swing.JFrame {
     private CardLayout cardAuth;
-    private CardLayout cardHello;
     
     /**
      * Creates new form FormAuth
@@ -26,7 +26,6 @@ public class FormAuth extends javax.swing.JFrame {
     public FormAuth() {
         initComponents();
         this.cardAuth = (CardLayout) authPanel.getLayout();
-        this.cardHello = (CardLayout) helloPanel.getLayout();
         
         setExtendedState(6);
         komponenAuth();
@@ -41,10 +40,6 @@ public class FormAuth extends javax.swing.JFrame {
         //Auth Panel
         authPanel.add(new Login(this), "Login");
         authPanel.add(new Register(this), "Register");
-        
-        //Hello Panel
-        helloPanel.add(new HelloLogin(this), "Login");
-        helloPanel.add(new HelloRegister(this), "Register");
     }
     
     public void ubahPanel(String sesiAuth){
@@ -53,16 +48,15 @@ public class FormAuth extends javax.swing.JFrame {
                 cardAuth.show(authPanel, sesiAuth);
                 
                 if ((getExtendedState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
-                    cardHello.show(helloPanel, sesiAuth);
-                    ubahUrutanPanel(helloPanel, authPanel);
+                    ubahUrutanPanel(welcomePanel, authPanel);
                 }
             }
             
             case "Login" -> {
                 cardAuth.show(authPanel, sesiAuth);
+                
                 if ((getExtendedState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
-                    cardHello.show(helloPanel, sesiAuth);
-                    ubahUrutanPanel(authPanel, helloPanel);
+                    ubahUrutanPanel(authPanel, welcomePanel);
                 }
             }
         }
@@ -93,9 +87,11 @@ public class FormAuth extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         authPanel = new javax.swing.JPanel();
-        helloPanel = new javax.swing.JPanel();
+        welcomePanel = new BackgroundPanel("lcbusana-welcome.png");
+        btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(6);
@@ -118,9 +114,29 @@ public class FormAuth extends javax.swing.JFrame {
         authPanel.setLayout(new java.awt.CardLayout());
         getContentPane().add(authPanel);
 
-        helloPanel.setBackground(new java.awt.Color(207, 183, 146));
-        helloPanel.setLayout(new java.awt.CardLayout());
-        getContentPane().add(helloPanel);
+        welcomePanel.setLayout(new java.awt.GridBagLayout());
+
+        btnBack.setFont(new java.awt.Font("Segoe Print", 1, 24)); // NOI18N
+        btnBack.setForeground(new java.awt.Color(207, 183, 146));
+        btnBack.setText("kembali");
+        btnBack.setBorderPainted(false);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBack.setFocusPainted(false);
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(50, 50, 50, 50);
+        welcomePanel.add(btnBack, gridBagConstraints);
+
+        getContentPane().add(welcomePanel);
 
         pack();
         setLocationRelativeTo(null);
@@ -133,17 +149,17 @@ public class FormAuth extends javax.swing.JFrame {
                 
         // Cek jika JFrame pertama kali dimulai dengan ukuran maximize
         if (getExtendedState() == JFrame.MAXIMIZED_BOTH) {
-            contentPane.add(helloPanel);
+            contentPane.add(welcomePanel);
         }
     
         if ((oldState & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH &&
             (newState & Frame.MAXIMIZED_BOTH) != Frame.MAXIMIZED_BOTH) {
-            // Hapus hello panel
-            contentPane.remove(helloPanel);
+            // Hapus welcome panel
+            contentPane.remove(welcomePanel);
         } else if ((oldState & Frame.MAXIMIZED_BOTH) != Frame.MAXIMIZED_BOTH &&
                    (newState & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
             //Kembalikan lagi hello panel
-            contentPane.add(helloPanel);
+            contentPane.add(welcomePanel);
         }
         
         // Reload Tampilan
@@ -155,9 +171,9 @@ public class FormAuth extends javax.swing.JFrame {
         Container contentPane = getContentPane();
     
         if ((getExtendedState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
-            contentPane.add(helloPanel);
+            contentPane.add(welcomePanel);
         } else {
-            contentPane.remove(helloPanel);
+            contentPane.remove(welcomePanel);
         }
 
         contentPane.revalidate();
@@ -167,6 +183,10 @@ public class FormAuth extends javax.swing.JFrame {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         Auth.getInstance().clear();
     }//GEN-LAST:event_formWindowActivated
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        kembaliKeHalamanUtama();
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -205,6 +225,7 @@ public class FormAuth extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel authPanel;
-    private javax.swing.JPanel helloPanel;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JPanel welcomePanel;
     // End of variables declaration//GEN-END:variables
 }

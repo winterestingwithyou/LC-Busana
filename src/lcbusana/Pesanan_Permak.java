@@ -260,7 +260,7 @@ public class Pesanan_Permak extends javax.swing.JPanel {
     private void viewData(int row){
         //Mengambil Nilai dari baris yang dipilih
         List<String> dataRow = new ArrayList();
-        for (int i = 0; i < tblData.getColumnCount() - 1; i++) {
+        for (int i = 1; i < tblData.getColumnCount() - 1; i++) {
             dataRow.add(tblData.getValueAt(row, i).toString()); // Tambahkan data ke list
         }
         

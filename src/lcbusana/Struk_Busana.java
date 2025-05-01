@@ -5,6 +5,7 @@
 package lcbusana;
 
 import java.util.List;
+import session.Auth;
 import tools.FormatData;
 import tools.ImageUtil;
 
@@ -824,39 +825,41 @@ public class Struk_Busana extends javax.swing.JDialog {
 
     private void loadData(){
         //Memperbarui Nilai Struk
-        lbNilaiNama.setText(data.get(0));
-        lbNilaiNoWA.setText(data.get(1));
-        lbNilaiEmail.setText(data.get(2));
-        lbNilaiAlamat.setText(data.get(3));
-        lbNilaiJenis.setText(data.get(4));
-        lbNilaiBahan.setText(data.get(7));
-        lbNilaiLingkarDada.setText(FormatData.toCm(data.get(8)));
-        lbNilaiLingkarPinggang.setText(FormatData.toCm(data.get(9)));
-        lbNilaiLingkarPinggul.setText(FormatData.toCm(data.get(10)));
-        lbNilaiPanjangLengan.setText(FormatData.toCm(data.get(11)));
-        lbNilaiPanjangBaju.setText(FormatData.toCm(data.get(12)));
-        lbNilaiTinggiBadan.setText(FormatData.toCm(data.get(13)));
-        lbNilaiLebarBahu.setText(FormatData.toCm(data.get(14)));
-        lbNilaiAplikasiTambahan.setText(data.get(15));
-        lbNilaiDetailKhusus.setText(data.get(16));
-        lbNilaiKebutuhanKhusus.setText(data.get(17));
-        lbNilaiTanggal.setText(FormatData.tanggal(data.get(18)));
+        lbNilaiJenis.setText(data.get(0));
+        lbNilaiBahan.setText(data.get(3));
+        lbNilaiLingkarDada.setText(FormatData.toCm(data.get(4)));
+        lbNilaiLingkarPinggang.setText(FormatData.toCm(data.get(5)));
+        lbNilaiLingkarPinggul.setText(FormatData.toCm(data.get(6)));
+        lbNilaiPanjangLengan.setText(FormatData.toCm(data.get(7)));
+        lbNilaiPanjangBaju.setText(FormatData.toCm(data.get(8)));
+        lbNilaiTinggiBadan.setText(FormatData.toCm(data.get(9)));
+        lbNilaiLebarBahu.setText(FormatData.toCm(data.get(10)));
+        lbNilaiAplikasiTambahan.setText(data.get(11));
+        lbNilaiDetailKhusus.setText(data.get(12));
+        lbNilaiKebutuhanKhusus.setText(data.get(13));
+        lbNilaiTanggal.setText(FormatData.sqlDateToTanggal(data.get(14)));
 
         //Mengatur nilai harga berdasarkan metode
-        String biaya = data.get(19);
-        String metode = data.get(20);
+        String biaya = data.get(15);
+        String metode = data.get(16);
         lbNilaiBiaya.setText(FormatData.toRupiah(biaya)+cekHargaDP(Double.parseDouble(biaya), metode));
         lbNilaiMetode.setText(metode);
 
-
         //Menampilkan Gambar pada Model 
-        ImageUtil.setImageToLabel(lbNilaiModel, data.get(5));
+        ImageUtil.setImageToLabel(lbNilaiModel, data.get(1));
 
         //Mengubah background Warna sesuai warna yang dipilih
         lbNilaiWarna.setText(" ");
-        lbNilaiWarna.setBackground(FormatData.rgbStringToColor(data.get(6)));
+        lbNilaiWarna.setBackground(FormatData.rgbStringToColor(data.get(2)));
         lbNilaiWarna.setOpaque(true);
         lbNilaiWarna.repaint();
+        
+        //Menampilkan data diri di struk
+        Auth auth = Auth.getInstance();
+        lbNilaiNama.setText(auth.getNamaLengkap());
+        lbNilaiNoWA.setText(auth.getNomorWa());
+        lbNilaiEmail.setText(auth.getEmail());
+        lbNilaiAlamat.setText(auth.getAlamat());
     }
     
     private String cekHargaDP(Double harga, String metode){

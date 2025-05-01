@@ -17,18 +17,21 @@ import java.util.TimeZone;
  * @author Acer
  */
 public class FormatData {
-    public static String tanggal(String dateStr) {
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-            inputFormat.setTimeZone(TimeZone.getTimeZone("Asia/Jakarta")); // WIB = Asia/Jakarta
-            
-            Date date = inputFormat.parse(dateStr);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("d MMMM yyyy", new Locale("id", "ID"));
-            return outputFormat.format(date);
-        } catch (ParseException e) {
-            return "Invalid date format";
+    public static String sqlDateToTanggal(String mysqlDateStr) {
+        String[] patterns = {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"};
+        for (String pattern : patterns) {
+            try {
+                SimpleDateFormat inputFormat = new SimpleDateFormat(pattern);
+                inputFormat.setTimeZone(TimeZone.getTimeZone("Asia/Jakarta"));
+
+                Date date = inputFormat.parse(mysqlDateStr);
+                SimpleDateFormat outputFormat = new SimpleDateFormat("d MMMM yyyy", new Locale("id", "ID"));
+                return outputFormat.format(date);
+            } catch (ParseException ignored) {}
         }
+        return "Format tanggal tidak valid";
     }
+
     
     public static String toCm(String value) {
         double number = Double.parseDouble(value);

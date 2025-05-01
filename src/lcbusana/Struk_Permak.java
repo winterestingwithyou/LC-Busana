@@ -5,6 +5,7 @@
 package lcbusana;
 
 import java.util.List;
+import session.Auth;
 import tools.FormatData;
 import tools.ImageUtil;
 
@@ -663,26 +664,29 @@ public class Struk_Permak extends javax.swing.JDialog {
 
     private void loadData(){
         //Memperbarui Nilai Struk
-        lbNilaiNama.setText(data.get(0));
-        lbNilaiNoWA.setText(data.get(1));
-        lbNilaiEmail.setText(data.get(2));
-        lbNilaiAlamat.setText(data.get(3));
-        lbNilaiJenis.setText(data.get(4));
-        lbNilaiBahan.setText(data.get(5));
-        lbNilaiJumlah.setText(data.get(6));
-        lbNilaiJenisPerbaikan.setText("<html>" + data.get(7).replace(",", "<br>") + "</html>");
-        lbNilaiUkuran.setText(FormatData.toCm(data.get(8)));
-        lbNilaiDeskripsiTambahan.setText(data.get(10));
-        lbNilaiTanggal.setText(FormatData.tanggal(data.get(11)));
+        lbNilaiJenis.setText(data.get(0));
+        lbNilaiBahan.setText(data.get(1));
+        lbNilaiJumlah.setText(data.get(2));
+        lbNilaiJenisPerbaikan.setText("<html>" + data.get(3).replace(",", "<br>") + "</html>");
+        lbNilaiUkuran.setText(FormatData.toCm(data.get(4)));
+        lbNilaiDeskripsiTambahan.setText(data.get(6));
+        lbNilaiTanggal.setText(FormatData.sqlDateToTanggal(data.get(7)));
 
         //Mengatur nilai harga berdasarkan metode
-        String biaya = data.get(12);
-        String metode = data.get(13);
+        String biaya = data.get(8);
+        String metode = data.get(9);
         lbNilaiBiaya.setText(FormatData.toRupiah(biaya)+cekHargaDP(Double.parseDouble(biaya), metode));
         lbNilaiMetode.setText(metode);
 
         //Menampilkan Gambar pada Model 
-        ImageUtil.setImageToLabel(lbNilaiGambarPakaian, data.get(9));
+        ImageUtil.setImageToLabel(lbNilaiGambarPakaian, data.get(5));
+        
+        //Menampilkan data diri di struk
+        Auth auth = Auth.getInstance();
+        lbNilaiNama.setText(auth.getNamaLengkap());
+        lbNilaiNoWA.setText(auth.getNomorWa());
+        lbNilaiEmail.setText(auth.getEmail());
+        lbNilaiAlamat.setText(auth.getAlamat());
     }
     
     private String cekHargaDP(Double harga, String metode){
