@@ -289,6 +289,11 @@ public class Login extends javax.swing.JPanel {
         }
     }
     
+    public void setDefaultField(){
+        txtUsername.setText("Username");
+        txtPassword.setText("Password");
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnLupa;

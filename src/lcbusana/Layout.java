@@ -17,6 +17,7 @@ public class Layout extends javax.swing.JFrame {
     private CardLayout card;
     private String status; //Permak or Busana
     private boolean onEdit = false;
+    private FormAuth fAuth;
     private FormPesanBusana_Main bmain = new FormPesanBusana_Main(this);
     private FormPesanBusana_Ukuran bukuran = new FormPesanBusana_Ukuran(this);
     private FormPesanBusana_Tambahan btambahan = new FormPesanBusana_Tambahan(this);
@@ -102,6 +103,11 @@ public class Layout extends javax.swing.JFrame {
         setTitle("LC Busana");
         setExtendedState(6);
         setPreferredSize(new java.awt.Dimension(1100, 650));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         pnlNavigasi.setBackground(new java.awt.Color(207, 183, 146));
@@ -243,6 +249,20 @@ public class Layout extends javax.swing.JFrame {
     public void setOnEdit(boolean onEdit) {
         this.onEdit = onEdit;
     }
+      
+    /**
+     * @return the fAuth
+     */
+    public FormAuth getfAuth() {
+        return fAuth;
+    }
+
+    /**
+     * @param fAuth the fAuth to set
+     */
+    public void setfAuth(FormAuth fAuth) {
+        this.fAuth = fAuth;
+    }
     
     private void btnPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesananActionPerformed
         ubahPanel("pesanan");
@@ -268,31 +288,30 @@ public class Layout extends javax.swing.JFrame {
 
     private void menuLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoginActionPerformed
         //Mengubah ke halaman Login
-        dispose();
-        FormAuth fAuth = new FormAuth();
-        fAuth.setVisible(true);
+        FormAuth fAuth = keAutentikasi();
         fAuth.ubahPanel("Login");
     }//GEN-LAST:event_menuLoginActionPerformed
 
     private void menuRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRegisterActionPerformed
         //Mengubah ke halaman Register
-        dispose();
-        FormAuth fAuth = new FormAuth();
-        fAuth.setVisible(true);
+        FormAuth fAuth = keAutentikasi();
         fAuth.ubahPanel("Register");
     }//GEN-LAST:event_menuRegisterActionPerformed
 
     private void menuLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLogOutActionPerformed
         //Kembali ke halaman Autentikasi
-        dispose();
-        FormAuth fAuth = new FormAuth();
-        fAuth.setVisible(true);
+        keAutentikasi();
     }//GEN-LAST:event_menuLogOutActionPerformed
 
     private void menuProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProfilActionPerformed
         //Ubah Ke halaman Profil
         ubahPanel("datadiri");
     }//GEN-LAST:event_menuProfilActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // Menyesuaikan Tampilan sesuai dengan keadaan autentikasi
+        sesuaikanTampilanAutentikasi();
+    }//GEN-LAST:event_formComponentShown
     
     private void komponenBody(){    
         pnlBody.add(new Dashboard(this), "dashboard");
@@ -350,17 +369,23 @@ public class Layout extends javax.swing.JFrame {
         ubahPanel("pmain");
     }
     
-    public void keAutentikasi(){
-        dispose();
-        new FormAuth().setVisible(true);
+    public FormAuth keAutentikasi(){
+        setVisible(false);
+        FormAuth fAuth = this.fAuth;
+        fAuth.setVisible(true);
+        return fAuth;
     }
     
     private void sesuaikanTampilanAutentikasi(){
+        //Cek dan sesuaikan tampilan dengan kondisi autentikasi
         if(!Auth.getInstance().isAuth()){
             btnPesanan.setVisible(false);
         } else {
             btnPesanan.setVisible(true);
         }
+        
+        //Ubah ke Panel dashboard sebagai tampilan default
+        ubahPanel("dashboard");
         
         //Refresh tampilan
         revalidate();

@@ -310,6 +310,12 @@ public class Register extends javax.swing.JPanel {
             return false;
         }
     }
+    
+    public void clear(){
+        txtUsername.setText("Username");
+        txtPassword.setText("Password");
+        txtKonfirmasiPassword.setText("Konfirmasi Password");
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

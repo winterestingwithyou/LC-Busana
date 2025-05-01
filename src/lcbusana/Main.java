@@ -5,6 +5,7 @@
 package lcbusana;
 
 import java.awt.*;
+import lcbusana.auth.FormAuth;
 
 /**
  *
@@ -16,6 +17,15 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new Layout().setVisible(true);
+        //Deklarasi Frame
+        Layout main = new Layout();
+        FormAuth fAuth = new FormAuth();
+        
+        //Atur agar frame saling berhubungan
+        main.setfAuth(fAuth);
+        fAuth.setMain(main);
+        
+        //Tampilkan Layout sebagai frame pertama
+        main.setVisible(true);
     }
 }

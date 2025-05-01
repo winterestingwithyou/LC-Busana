@@ -19,6 +19,11 @@ import session.Auth;
  */
 public class FormAuth extends javax.swing.JFrame {
     private CardLayout cardAuth;
+    private Layout main;
+    
+    //final properties
+    private final Login login = new Login(this);
+    private final Register register = new Register(this);
     
     /**
      * Creates new form FormAuth
@@ -29,17 +34,27 @@ public class FormAuth extends javax.swing.JFrame {
         
         setExtendedState(6);
         komponenAuth();
+        
+    }
+    
+    /**
+     * @return the main
+     */
+    public Layout getMain() {
+        return main;
     }
 
-    public FormAuth(String sesiAuth){
-        this();
-        ubahPanel(sesiAuth);
+    /**
+     * @param main the main to set
+     */
+    public void setMain(Layout main) {
+        this.main = main;
     }
     
     private void komponenAuth(){    
         //Auth Panel
-        authPanel.add(new Login(this), "Login");
-        authPanel.add(new Register(this), "Register");
+        authPanel.add(login, "Login");
+        authPanel.add(register, "Register");
     }
     
     public void ubahPanel(String sesiAuth){
@@ -75,8 +90,8 @@ public class FormAuth extends javax.swing.JFrame {
     }
     
     public void kembaliKeHalamanUtama(){
-        dispose();
-        new Layout().setVisible(true);
+        setVisible(false);
+        getMain().setVisible(true);
     }
     
     /**
@@ -94,17 +109,20 @@ public class FormAuth extends javax.swing.JFrame {
         btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Autentikasi");
         setExtendedState(6);
         setPreferredSize(new java.awt.Dimension(600, 700));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         addWindowStateListener(new java.awt.event.WindowStateListener() {
             public void windowStateChanged(java.awt.event.WindowEvent evt) {
                 formWindowStateChanged(evt);
             }
         });
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                formWindowActivated(evt);
-            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -180,13 +198,18 @@ public class FormAuth extends javax.swing.JFrame {
         contentPane.repaint();
     }//GEN-LAST:event_formWindowOpened
 
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        Auth.getInstance().clear();
-    }//GEN-LAST:event_formWindowActivated
-
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         kembaliKeHalamanUtama();
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        //Membersihkan sesi autentikasi
+        Auth.getInstance().clear();
+        
+        //Mengosongkan field
+        login.setDefaultField();
+        register.clear();
+    }//GEN-LAST:event_formComponentShown
 
     /**
      * @param args the command line arguments
