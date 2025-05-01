@@ -11,11 +11,13 @@ import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.JFrame;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import session.Auth;
 import tools.Selector;
 
 /**
@@ -300,14 +302,21 @@ public class FormPermak_WaktuBiaya extends javax.swing.JPanel {
             }
         }
         
-        // Simpan data
-        DataPermakBusana data = DataPermakBusana.getInstance();
-        data.setTanggalPengambilan(tanggal);
-        data.setEstimasiBiaya(biaya);
-        data.setMetodePembayaran(metode);
-        
-        // Pindah ke halaman selanjutnya Form data diri
-        main.ubahPanel("datadiri"); 
+        // Lakukan Operasi  
+        //Cek Apakah sedang mengedit
+        if(main.isOnEdit()){
+            // Perbarui Data
+            if(updateDataPermakBusana(tanggal, biaya, metode)){
+                // Selesai Edit, kembali kembali ke Pesanan
+                main.ubahPanel("pesanan");
+            }   
+        } else {
+            // Simpan data
+            if(simpanDataPermakBusana(tanggal, biaya, metode)){
+                // Selesai, kembali ke form dashboatd
+                main.ubahPanel("dashboard"); 
+            }
+        }
     }//GEN-LAST:event_btnBerikutnyaActionPerformed
 
     private void txtBiayaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBiayaKeyTyped
@@ -345,6 +354,37 @@ public class FormPermak_WaktuBiaya extends javax.swing.JPanel {
         jsTanggal.setValue(data.getTanggalPengambilan());
         txtBiaya.setText(Integer.toString((int) data.getEstimasiBiaya()));
         Selector.selectRadioByActionCommand(metode, data.getMetodePembayaran());
+    }
+    
+    private boolean simpanDataPermakBusana(Date tanggal, long biaya, String metode) {        
+        try {
+            DataPermakBusana data = DataPermakBusana.getInstance();
+            data.setTanggalPengambilan(tanggal);
+            data.setEstimasiBiaya(biaya);
+            data.setMetodePembayaran(metode);
+            data.setIdPelanggan(Auth.getInstance().getAuthUser());
+            data.save();
+            
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal Menyimpan Data \n" + e, "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+    
+    private boolean updateDataPermakBusana(Date tanggal, long biaya, String metode) {        
+        try {
+            DataPermakBusana data = DataPermakBusana.getInstance();
+            data.setTanggalPengambilan(tanggal);
+            data.setEstimasiBiaya(biaya);
+            data.setMetodePembayaran(metode);
+            data.update();
+            
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal Memperbarui Data \n" + e, "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

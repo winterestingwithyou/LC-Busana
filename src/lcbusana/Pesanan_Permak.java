@@ -31,6 +31,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import session.Auth;
 import tools.FormatData;
 
 /**
@@ -76,11 +77,11 @@ public class Pesanan_Permak extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Nama Lengkap", "Nomor Telepon", "Alamat Email", "Alamat Pengiriman", "Jenis Pakaian", "Bahan Pakaian", "Jumlah Pakaian", "Jenis Perbaikan", "Ukuran Setelah diperbaiki", "Foto Pakaian", "Deskripsi Tambahan", "Tanggal Pengembalian", "Estimasi Biaya", "Metode Pembayaran", "Aksi"
+                "ID Permak", "Jenis Pakaian", "Bahan Pakaian", "Jumlah Pakaian", "Jenis Perbaikan", "Ukuran Setelah diperbaiki", "Foto Pakaian", "Deskripsi Tambahan", "Tanggal Pengembalian", "Estimasi Biaya", "Metode Pembayaran", "Aksi"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -104,23 +105,32 @@ public class Pesanan_Permak extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     public void tampilkanDataPermak() {
-        String query = "SELECT * FROM view_pesanan_permak";
+        String query = "SELECT *" +
+                        " FROM view_pesanan_permak" +
+                        " WHERE id_permak IN (" +
+                            " SELECT id_permak" +
+                            " FROM pesanan_permak" +
+                            " WHERE id_pelanggan = ?" +
+                        " )";
+        
         try(Connection conn = Koneksi.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query);
-                ResultSet rs = stmt.executeQuery()){
+                PreparedStatement stmt = conn.prepareStatement(query);){
+            stmt.setInt(1, Auth.getInstance().getAuthUser());
             
-            DefaultTableModel model = (DefaultTableModel) tblData.getModel();
-            model.setRowCount(0); // Menghapus data lama
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            
-            while (rs.next()) {
-                Object[] rowData = new Object[columnCount];
-                for (int i = 1; i <= columnCount; i++) {
-                    rowData[i - 1] = rs.getObject(i);
+            try(ResultSet rs = stmt.executeQuery()){
+                DefaultTableModel model = (DefaultTableModel) tblData.getModel();
+                model.setRowCount(0); // Menghapus data lama
+                ResultSetMetaData metaData = rs.getMetaData();
+                int columnCount = metaData.getColumnCount();
+
+                while (rs.next()) {
+                    Object[] rowData = new Object[columnCount];
+                    for (int i = 1; i <= columnCount; i++) {
+                        rowData[i - 1] = rs.getObject(i);
+                    }
+                    model.addRow(rowData);
                 }
-                model.addRow(rowData);
-            }
+            }   
         } catch(SQLException e){
             System.out.println("Gagal mengambil data: " + e.getMessage()); 
         }
@@ -164,8 +174,8 @@ public class Pesanan_Permak extends javax.swing.JPanel {
     
     private void manageRenderer(){
         //Aksi (Tambah, Update, Delete)
-        tblData.getColumnModel().getColumn(14).setCellRenderer(new TableActionCellRenderer());
-        tblData.getColumnModel().getColumn(14).setCellEditor(new TableActionCellEditor(event()));
+        tblData.getColumnModel().getColumn(11).setCellRenderer(new TableActionCellRenderer());
+        tblData.getColumnModel().getColumn(11).setCellEditor(new TableActionCellEditor(event()));
     }
     
     private TableActionEvent event(){
@@ -197,22 +207,17 @@ public class Pesanan_Permak extends javax.swing.JPanel {
         
         //Mengisi Nilai dari array tadi ke DataPesanBusana
         DataPermakBusana dataPermak = DataPermakBusana.getInstance();
-        dataPermak.setNamaLengkap(rowData.get(0));
-        dataPermak.setNomorTelepon(rowData.get(1));
-        dataPermak.setAlamatEmail(rowData.get(2));
-        dataPermak.setAlamatPengiriman(rowData.get(3));
-        dataPermak.setJenisPakaian(rowData.get(4));
-        dataPermak.setBahanPakaian(rowData.get(5));
-        dataPermak.setJumlahPakaian(Integer.parseInt(rowData.get(6)));
-        dataPermak.setJenisPerbaikan(rowData.get(7));
-        dataPermak.setUkuranSetelahDiperbaiki(Double.parseDouble(rowData.get(8)));
-        dataPermak.setFotoPakaian(rowData.get(9));
-        dataPermak.setDeskripsiTambahan(rowData.get(10));
-        dataPermak.setTanggalPengambilan(FormatData.toDate(rowData.get(11)));
-        dataPermak.setEstimasiBiaya(Double.parseDouble(rowData.get(12)));
-        dataPermak.setMetodePembayaran(rowData.get(13));
-        dataPermak.setIdPelanggan(loadIdPelangganbyEmail(dataPermak.getAlamatEmail()));
-        dataPermak.setIdPermakBusana(loadIdPermakbyIdPelanggan(dataPermak.getIdPelanggan()));
+        dataPermak.setIdPermakBusana(Integer.parseInt(rowData.get(0)));
+        dataPermak.setJenisPakaian(rowData.get(1));
+        dataPermak.setBahanPakaian(rowData.get(2));
+        dataPermak.setJumlahPakaian(Integer.parseInt(rowData.get(3)));
+        dataPermak.setJenisPerbaikan(rowData.get(4));
+        dataPermak.setUkuranSetelahDiperbaiki(Double.parseDouble(rowData.get(5)));
+        dataPermak.setFotoPakaian(rowData.get(6));
+        dataPermak.setDeskripsiTambahan(rowData.get(7));
+        dataPermak.setTanggalPengambilan(FormatData.toDate(rowData.get(8)));
+        dataPermak.setEstimasiBiaya(Double.parseDouble(rowData.get(9)));
+        dataPermak.setMetodePembayaran(rowData.get(10));
         
         main.editPesananPermak();
     }
@@ -225,15 +230,15 @@ public class Pesanan_Permak extends javax.swing.JPanel {
 
         if (pilihan == JOptionPane.YES_OPTION) {
             try {
-                // Ambil email dari kolom index ke-2
-                String email = tblData.getValueAt(row, 2).toString();
+                // Ambil id Permak dari kolom index ke-0
+                String idPermak = tblData.getValueAt(row, 0).toString();
                 
-                String query = "DELETE FROM pelanggan WHERE email = ?";
+                String query = "DELETE FROM pesanan_permak WHERE id_permak = ?";
 
                 try (Connection conn = Koneksi.getConnection();
                      PreparedStatement stmt = conn.prepareStatement(query)) {
 
-                    stmt.setString(1, email); // Set parameter email
+                    stmt.setString(1, idPermak); // Set parameter idPermak
                     int affectedRows = stmt.executeUpdate();
 
                     if (affectedRows > 0) {
@@ -264,52 +269,6 @@ public class Pesanan_Permak extends javax.swing.JPanel {
         struk.setVisible(true);
     }
 
-    private Integer loadIdPermakbyIdPelanggan(int idPelanggan){
-        String query = "SELECT id_permak FROM pesanan_permak WHERE id_pelanggan = ?";
-        
-        try (
-            Connection conn = Koneksi.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query);
-        ) {
-            stmt.setInt(1, idPelanggan);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("id_permak");
-                } else {
-                    return null; // Tidak ditemukan
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    
-    private Integer loadIdPelangganbyEmail(String email){
-        String query = "SELECT id_pelanggan FROM pelanggan WHERE email = ?";
-        
-        try (
-            Connection conn = Koneksi.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query);
-        ) {
-            stmt.setString(1, email);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("id_pelanggan");
-                } else {
-                    return null; // Tidak ditemukan
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    
     private void aturLookAndFeel(){
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");

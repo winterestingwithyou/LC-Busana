@@ -132,9 +132,9 @@ public class Pesanan_Busana extends javax.swing.JPanel {
         String query = "SELECT *" +
                         " FROM view_pesanan_busana" +
                         " WHERE id_pesanan IN (" +
-                        " SELECT id_pesanan" +
-                        " FROM pesanan_busana" +
-                        " WHERE id_pelanggan = ?" +
+                            " SELECT id_pesanan" +
+                            " FROM pesanan_busana" +
+                            " WHERE id_pelanggan = ?" +
                         " )";
         
         try(Connection conn = Koneksi.getConnection();
@@ -237,7 +237,7 @@ public class Pesanan_Busana extends javax.swing.JPanel {
 
         if (pilihan == JOptionPane.YES_OPTION) {
             try {
-                // Ambil email dari kolom index ke-2
+                // Ambil id Pesanan dari kolom index ke-0
                 String idPesanan = tblData.getValueAt(row, 0).toString();
                 
                 String query = "DELETE FROM pesanan_busana WHERE id_pesanan = ?";

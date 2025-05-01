@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import java.sql.SQLException;
+import session.Auth;
 
 /**
  *
@@ -30,6 +31,8 @@ public class FormDataDiri extends javax.swing.JPanel {
     public FormDataDiri(JFrame frame) {
         initComponents();
         this.main = (Layout) frame;
+        
+        isiFieldSesuaiDataSesiPelanggan();
     }
 
     /**
@@ -284,79 +287,13 @@ public class FormDataDiri extends javax.swing.JPanel {
         }
         
         //Cek Apakah sedang mengedit
-        if(main.isOnEdit()){
-            switch(main.getStatus()){
-                case "Busana" -> updateDataPesanBusana(nama, noWa, email, alamat);            
-                case "Permak" -> updateDataPermakBusana(nama, noWa, email, alamat);
-            }          
-            
-            // Selesai Edit, kembali kembali ke Pesanan
-             main.ubahPanel("pesanan");
-        } else {
-            switch(main.getStatus()){
-                case "Busana" -> tambahDataPesanBusana(nama, noWa, email, alamat);            
-                case "Permak" -> tambahDataPermakBusana(nama, noWa, email, alamat);
-            } 
-            
-            // Selesai, kembali ke form dashboatd
-            main.ubahPanel("dashboard"); 
-        }
+        
     }//GEN-LAST:event_btnSelesaiActionPerformed
 
     private void btnSebelumnyaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSebelumnyaActionPerformed
         //kembali ke form dashboatd
         main.ubahPanel("dashboard");
     }//GEN-LAST:event_btnSebelumnyaActionPerformed
-
-    private boolean tambahDataPesanBusana(String nama, String no, String email, String alamat) {        
-        try {
-            DataPesanBusana data= DataPesanBusana.getInstance();
-            data.setNamaLengkap(nama);
-            data.setNomorTelepon(no);
-            data.setAlamatEmail(email);
-            data.setAlamatPengiriman(alamat);
-            data.save();
-            
-            return true;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Gagal Menyimpan Data \n" + e, "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
-    
-    private void tambahDataPermakBusana(String nama, String no, String email, String alamat) {        
-        DataPermakBusana data = DataPermakBusana.getInstance();
-        data.setNamaLengkap(nama);
-        data.setNomorTelepon(no);
-        data.setAlamatEmail(email);
-        data.setAlamatPengiriman(alamat);
-        data.save();
-    }
-    
-    private boolean updateDataPesanBusana(String nama, String no, String email, String alamat) {
-        try {
-            DataPesanBusana data= DataPesanBusana.getInstance();
-            data.setNamaLengkap(nama);
-            data.setNomorTelepon(no);
-            data.setAlamatEmail(email);
-            data.setAlamatPengiriman(alamat);
-            data.update();
-            
-            return true;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Gagal Memperbarui Data \n" + e, "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
-    
-    private void updateDataPermakBusana(String nama, String no, String email, String alamat) {
-        DataPermakBusana data= DataPermakBusana.getInstance();
-        data.setNamaLengkap(nama);
-        data.setNomorTelepon(no);
-        data.setAlamatEmail(email);
-        data.setAlamatPengiriman(alamat);
-        data.update();
-    }
     
     private void txtNamaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNamaKeyTyped
         char c = evt.getKeyChar();
@@ -425,20 +362,19 @@ public class FormDataDiri extends javax.swing.JPanel {
         txtNoWA.setText(null);
     }
     
-    public void isiDataEditPesanBusana(){
-        DataPesanBusana data = DataPesanBusana.getInstance();
-        txtAlamat.setText(data.getAlamatPengiriman());
-        txtEmail.setText(data.getAlamatEmail());
-        txtNama.setText(data.getNamaLengkap());
-        txtNoWA.setText(data.getNomorTelepon());
-    }
-    
-    void isiDataEditPermakBusana() {
-        DataPermakBusana data = DataPermakBusana.getInstance();
-        txtAlamat.setText(data.getAlamatPengiriman());
-        txtEmail.setText(data.getAlamatEmail());
-        txtNama.setText(data.getNamaLengkap());
-        txtNoWA.setText(data.getNomorTelepon());
+    public void isiFieldSesuaiDataSesiPelanggan(){
+        //Mengambil nilai dari data sesi Auth
+        Auth data = Auth.getInstance();
+        String nama = data.getNamaLengkap() == null ? "" : data.getNamaLengkap();
+        String noWa = data.getNomorWa()== null ? "" : data.getNomorWa();
+        String email = data.getEmail()== null ? "" : data.getEmail();
+        String alamat = data.getAlamat()== null ? "" : data.getAlamat();
+        
+        //Mengisi field sesuai dengan nilai yang diambil
+        txtAlamat.setText(alamat);
+        txtEmail.setText(email);
+        txtNama.setText(nama);
+        txtNoWA.setText(noWa);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

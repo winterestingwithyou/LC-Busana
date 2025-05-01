@@ -82,6 +82,11 @@ public class Layout extends javax.swing.JFrame {
 
         menuProfil.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         menuProfil.setText("Profil");
+        menuProfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuProfilActionPerformed(evt);
+            }
+        });
         popUPProfileAAuth.add(menuProfil);
 
         menuLogOut.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -283,6 +288,11 @@ public class Layout extends javax.swing.JFrame {
         FormAuth fAuth = new FormAuth();
         fAuth.setVisible(true);
     }//GEN-LAST:event_menuLogOutActionPerformed
+
+    private void menuProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProfilActionPerformed
+        //Ubah Ke halaman Profil
+        ubahPanel("datadiri");
+    }//GEN-LAST:event_menuProfilActionPerformed
     
     private void komponenBody(){    
         pnlBody.add(new Dashboard(this), "dashboard");
@@ -335,8 +345,7 @@ public class Layout extends javax.swing.JFrame {
         pmain.isiDataEdit();
         pjenis.isiDataEdit();
         ptambahan.isiDataEdit();
-        pwaktubiaya.isiDataEdit();
-        datadiri.isiDataEditPermakBusana();      
+        pwaktubiaya.isiDataEdit();  
         
         ubahPanel("pmain");
     }

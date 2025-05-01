@@ -22,10 +22,6 @@ public class DataPermakBusana {
 
     private int idPelanggan;
     private int idPermakBusana;
-    private String namaLengkap;
-    private String nomorTelepon;
-    private String alamatEmail;    
-    private String alamatPengiriman;
     private String jenisPakaian;
     private String bahanPakaian;
     private int jumlahPakaian;
@@ -47,18 +43,6 @@ public class DataPermakBusana {
     }
 
     // Getter dan Setter
-    public String getNamaLengkap() { return namaLengkap; }
-    public void setNamaLengkap(String namaLengkap) { this.namaLengkap = namaLengkap; }
-
-    public String getNomorTelepon() { return nomorTelepon; }
-    public void setNomorTelepon(String nomorTelepon) { this.nomorTelepon = nomorTelepon; }
-
-    public String getAlamatEmail() { return alamatEmail; }
-    public void setAlamatEmail(String alamatEmail) { this.alamatEmail = alamatEmail; }
-
-    public String getAlamatPengiriman() { return alamatPengiriman; }
-    public void setAlamatPengiriman(String alamatPengiriman) { this.alamatPengiriman = alamatPengiriman; }
-
     public String getJenisPakaian() { return jenisPakaian; }
     public void setJenisPakaian(String jenisPakaian) { this.jenisPakaian = jenisPakaian; }
 
@@ -96,10 +80,8 @@ public class DataPermakBusana {
     public void setIdPermakBusana(int idPermakBusana) { this.idPermakBusana = idPermakBusana; }
     
     public void clear() {
-        namaLengkap = null;
-        nomorTelepon = null;
-        alamatEmail = null;
-        alamatPengiriman = null;
+        idPelanggan = 0;
+        idPermakBusana = 0;
         jenisPakaian = null;
         bahanPakaian = null;
         jumlahPakaian = 0;
@@ -112,26 +94,9 @@ public class DataPermakBusana {
         metodePembayaran = null;
     }
     
-    public void save() {
-        try (Connection conn = Koneksi.getConnection()) {
-            conn.setAutoCommit(false);
-            
-            // 1. Simpan ke tabel pelanggan
-            String sql = "INSERT INTO pelanggan (nama_lengkap, nomor_wa, email, alamat) VALUES (?, ?, ?, ?)";
-            PreparedStatement psPelanggan = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            psPelanggan.setString(1, namaLengkap);
-            psPelanggan.setString(2, nomorTelepon);
-            psPelanggan.setString(3, alamatEmail);
-            psPelanggan.setString(4, alamatPengiriman);
-            psPelanggan.executeUpdate();
-
-            //2. ambil id_pelanggan baru
-            ResultSet rsPelanggan = psPelanggan.getGeneratedKeys();
-            if (rsPelanggan.next()) {
-                setIdPelanggan(rsPelanggan.getInt(1));
-            }
-
-            //3. Simpan ke tabel permak_busana
+    public void save() throws SQLException {
+        try (Connection conn = Koneksi.getConnection()) { 
+            //1. Simpan ke tabel permak_busana
             String sqlPermak = "INSERT INTO pesanan_permak (id_pelanggan, jenis_busana, bahan, jumlah, jenis_permak, ukuran_sesudah, foto_pakaian, deskripsi_tambahan, tanggal_selesai, kisaran_biaya, metode_pembayaran) " +
                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement psPermak = conn.prepareStatement(sqlPermak);
@@ -147,45 +112,10 @@ public class DataPermakBusana {
             psPermak.setDouble(10, estimasiBiaya);
             psPermak.setString(11, metodePembayaran);
             psPermak.executeUpdate();
-            conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Gagal Menyimpan Data", "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void update() {
-        // Query untuk update data pelanggan
-        String updatePelangganQuery = """
-            UPDATE pelanggan SET 
-                nama_lengkap = ?, 
-                nomor_wa = ?, 
-                email = ?, 
-                alamat = ? 
-            WHERE id_pelanggan = ?
-        """;
-
-        try (
-            Connection conn = Koneksi.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(updatePelangganQuery)
-        ) {
-            stmt.setString(1, namaLengkap);
-            stmt.setString(2, nomorTelepon);
-            stmt.setString(3, alamatEmail);
-            stmt.setString(4, alamatPengiriman);
-            stmt.setInt(5, idPelanggan);
-
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null,
-                "Gagal memperbarui data pelanggan",
-                "Terjadi Kesalahan",
-                JOptionPane.ERROR_MESSAGE
-            );
-            return;
-        }
-
+    public void update() throws SQLException {
         // Query untuk update data pesanan busana
         String updatePermakQuery = """
             UPDATE pesanan_permak SET
@@ -219,13 +149,6 @@ public class DataPermakBusana {
             stmt.setInt(11, idPermakBusana);
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null,
-                "Gagal memperbaru data permak busana",
-                "Terjadi Kesalahan",
-                JOptionPane.ERROR_MESSAGE
-            );
         }
     }
 }
