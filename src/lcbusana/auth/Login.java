@@ -13,8 +13,8 @@ import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import lcbusana.Layout;
 import security.PasswordUtils;
+import session.Auth;
 
 /**
  *
@@ -245,7 +245,18 @@ public class Login extends javax.swing.JPanel {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private boolean login(String username, String password) {
-        String query = "SELECT username, password FROM pelanggan WHERE username = ? AND password = ?";
+        String query = """
+                        SELECT
+                            id_pelanggan,
+                            username,
+                            password,
+                            nama_lengkap,
+                            nomor_wa,
+                            email,
+                            alamat
+                            FROM pelanggan
+                        WHERE username = ? AND password = ?
+                       """;
 
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -256,6 +267,14 @@ public class Login extends javax.swing.JPanel {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     // Login berhasil
+                    Auth auth = Auth.getInstance();
+                    auth.setAuth(true);
+                    auth.setAuthUser(rs.getInt("id_pelanggan"));
+                    auth.setNamaLengkap("nama_lengkap");
+                    auth.setNomorWa("nomor_wa");
+                    auth.setEmail("email");
+                    auth.setAlamat("alamat");
+                    
                     return true;
                 } else {
                     // Username atau password tidak cocok

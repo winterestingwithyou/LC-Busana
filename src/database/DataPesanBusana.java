@@ -20,10 +20,6 @@ public class DataPesanBusana {
     
     private int idPelanggan;
     private int idPesananBusana;
-    private String namaLengkap;
-    private String nomorTelepon;
-    private String alamatEmail;
-    private String alamatPengiriman;
     private String jenisBusana;
     private String modelDesain; // Path atau URL file gambar
     private String warna;
@@ -52,18 +48,6 @@ public class DataPesanBusana {
     }
 
     // Getter dan Setter
-    public String getNamaLengkap() { return namaLengkap; }
-    public void setNamaLengkap(String namaLengkap) { this.namaLengkap = namaLengkap; }
-
-    public String getNomorTelepon() { return nomorTelepon; }
-    public void setNomorTelepon(String nomorTelepon) { this.nomorTelepon = nomorTelepon; }
-
-    public String getAlamatEmail() { return alamatEmail; }
-    public void setAlamatEmail(String alamatEmail) { this.alamatEmail = alamatEmail; }
-
-    public String getAlamatPengiriman() { return alamatPengiriman; }
-    public void setAlamatPengiriman(String alamatPengiriman) { this.alamatPengiriman = alamatPengiriman; }
-
     public String getJenisBusana() { return jenisBusana; }
     public void setJenisBusana(String jenisBusana) { this.jenisBusana = jenisBusana; }
 
@@ -122,10 +106,8 @@ public class DataPesanBusana {
     public void setIdPesananBusana(int idPesananBusana) { this.idPesananBusana = idPesananBusana; }
 
     public void clear() {
-        namaLengkap = null;
-        nomorTelepon = null;
-        alamatEmail = null;
-        alamatPengiriman = null;
+        idPelanggan = 0;
+        idPesananBusana = 0;
         jenisBusana = null;
         modelDesain = null;
         warna = null;
@@ -147,24 +129,7 @@ public class DataPesanBusana {
     
     public void save() throws SQLException {
         try (Connection conn = Koneksi.getConnection()) {
-            conn.setAutoCommit(false);
-            
-            // 1. Simpan ke tabel pelanggan
-            String sql = "INSERT INTO pelanggan (nama_lengkap, nomor_wa, email, alamat) VALUES (?, ?, ?, ?)";
-            PreparedStatement psPelanggan = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            psPelanggan.setString(1, namaLengkap);
-            psPelanggan.setString(2, nomorTelepon);
-            psPelanggan.setString(3, alamatEmail);
-            psPelanggan.setString(4, alamatPengiriman);
-            psPelanggan.executeUpdate();
-
-            //2. ambil id_pelanggan baru
-            ResultSet rsPelanggan = psPelanggan.getGeneratedKeys();
-            if (rsPelanggan.next()) {
-                setIdPelanggan(rsPelanggan.getInt(1));
-            }
-
-            //3. Simpan ke tabel pesan_busana
+            //1. Simpan ke tabel pesan_busana
             String sqlPesanan = "INSERT INTO pesanan_busana (id_pelanggan, jenis_busana, gambar_model, warna, bahan, ukuran_lingkar_dada, ukuran_pinggang, ukuran_pinggul, panjang_lengan, panjang_busana, tinggi_badan, lebar_bahu, aplikasi_tambahan, detail_khusus, kebutuhan_khusus, tanggal_perkiraan_jadi, kisaran_budget, metode_pembayaran) " +
                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement psPesan = conn.prepareStatement(sqlPesanan);
@@ -187,20 +152,10 @@ public class DataPesanBusana {
             psPesan.setDouble(17, kisaranBudget);
             psPesan.setString(18, metodePembayaran);
             psPesan.executeUpdate();
-            conn.commit();
         }
     }
 
     public void update() throws SQLException {
-        String updatePelangganQuery = """
-            UPDATE pelanggan SET 
-                nama_lengkap = ?, 
-                nomor_wa = ?, 
-                email = ?, 
-                alamat = ? 
-            WHERE id_pelanggan = ?
-        """;
-
         String updatePesananQuery = """
             UPDATE pesanan_busana SET
                 jenis_busana = ?, 
@@ -223,19 +178,8 @@ public class DataPesanBusana {
             WHERE id_pesanan = ?
         """;
 
-        try (Connection conn = Koneksi.getConnection()) {
-            conn.setAutoCommit(false);
-
-            try (PreparedStatement stmtPelanggan = conn.prepareStatement(updatePelangganQuery)) {
-                stmtPelanggan.setString(1, namaLengkap);
-                stmtPelanggan.setString(2, nomorTelepon);
-                stmtPelanggan.setString(3, alamatEmail);
-                stmtPelanggan.setString(4, alamatPengiriman);
-                stmtPelanggan.setInt(5, idPelanggan);
-                stmtPelanggan.executeUpdate();
-            }
-
-            try (PreparedStatement stmtPesanan = conn.prepareStatement(updatePesananQuery)) {
+        try (Connection conn = Koneksi.getConnection();
+                PreparedStatement stmtPesanan = conn.prepareStatement(updatePesananQuery)) {
                 stmtPesanan.setString(1, jenisBusana);
                 stmtPesanan.setString(2, modelDesain);
                 stmtPesanan.setString(3, warna);
@@ -255,9 +199,6 @@ public class DataPesanBusana {
                 stmtPesanan.setString(17, metodePembayaran);
                 stmtPesanan.setInt(18, idPesananBusana);
                 stmtPesanan.executeUpdate();
-            }
-
-            conn.commit();
         }
     }
 }

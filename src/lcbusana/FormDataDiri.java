@@ -237,7 +237,7 @@ public class FormDataDiri extends javax.swing.JPanel {
 
         btnSebelumnya.setBackground(new java.awt.Color(207, 183, 146));
         btnSebelumnya.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnSebelumnya.setText("< Sebelumnya");
+        btnSebelumnya.setText("Batal");
         btnSebelumnya.setBorderPainted(false);
         btnSebelumnya.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -304,10 +304,8 @@ public class FormDataDiri extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSelesaiActionPerformed
 
     private void btnSebelumnyaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSebelumnyaActionPerformed
-        switch(main.getStatus()){
-            case "Busana" -> main.ubahPanel("bwaktubiaya");
-            case "Permak" -> main.ubahPanel("pwaktubiaya");
-        }
+        //kembali ke form dashboatd
+        main.ubahPanel("dashboard");
     }//GEN-LAST:event_btnSebelumnyaActionPerformed
 
     private boolean tambahDataPesanBusana(String nama, String no, String email, String alamat) {        

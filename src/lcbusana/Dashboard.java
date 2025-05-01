@@ -10,6 +10,7 @@ import decorationcomponent.RoundedButton;
 import decorationcomponent.BackgroundPanel;
 import decorationcomponent.RoundedPanel;
 import javax.swing.JFrame;
+import session.Auth;
 
 /**
  *
@@ -126,13 +127,21 @@ public class Dashboard extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPesanBusanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesanBusanaActionPerformed
-        main.ubahPanel("bmain");
-        main.setStatus("Busana");
+        if(Auth.getInstance().isAuth()){
+            main.ubahPanel("bmain");
+            main.setStatus("Busana");
+        } else {
+            main.keAutentikasi();
+        }
     }//GEN-LAST:event_btnPesanBusanaActionPerformed
 
     private void btnPermakBusanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPermakBusanaActionPerformed
-        main.ubahPanel("pmain");
-        main.setStatus("Permak");
+        if(Auth.getInstance().isAuth()){
+            main.ubahPanel("pmain");
+            main.setStatus("Permak");
+        } else {
+            main.keAutentikasi();
+        }
     }//GEN-LAST:event_btnPermakBusanaActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown

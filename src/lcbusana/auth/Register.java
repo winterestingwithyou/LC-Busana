@@ -12,8 +12,9 @@ import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import lcbusana.Layout;
 import database.Koneksi;
+import java.sql.Statement;
+import session.Auth;
 
 /**
  *
@@ -197,7 +198,7 @@ public class Register extends javax.swing.JPanel {
 
     private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
         txtPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLUE));
-        if(txtPassword.getText().equals("Konfirmasi Password")
+        if(txtPassword.getText().equals("Password")
             && txtPassword.getEchoChar() == (char) 0){
             txtPassword.setText("");
             txtPassword.setEchoChar('*');
@@ -235,7 +236,7 @@ public class Register extends javax.swing.JPanel {
     private void txtKonfirmasiPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtKonfirmasiPasswordFocusLost
         txtKonfirmasiPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
         if(String.valueOf(txtKonfirmasiPassword.getPassword()).isEmpty()){
-            txtKonfirmasiPassword.setText("Password");
+            txtKonfirmasiPassword.setText("Konfirmasi Password");
             txtKonfirmasiPassword.setEchoChar((char) 0);
             txtKonfirmasiPassword.setForeground(Color.GRAY);
         }
@@ -281,12 +282,21 @@ public class Register extends javax.swing.JPanel {
             }
 
             // Jika username belum digunakan, lakukan insert
-            try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
                 insertStmt.setString(1, username);
                 insertStmt.setString(2, password); // diasumsikan sudah di-hash sebelum dikirim ke fungsi ini
 
                 int result = insertStmt.executeUpdate();
                 if (result > 0) {
+                    //Registrasi Berhasil
+                    Auth auth = Auth.getInstance();
+                    auth.setAuth(true);
+                    
+                    ResultSet rs = insertStmt.getGeneratedKeys();
+                    if (rs.next()) {
+                        auth.setAuthUser(rs.getInt(1));
+                    }
+                    
                     JOptionPane.showMessageDialog(null, "Registrasi berhasil", "Sukses", JOptionPane.INFORMATION_MESSAGE);
                     return true;
                 } else {

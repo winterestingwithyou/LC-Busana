@@ -10,6 +10,7 @@ import java.awt.Container;
 import java.awt.Frame;
 import javax.swing.JFrame;
 import lcbusana.Layout;
+import session.Auth;
 
 /**
  *
@@ -105,6 +106,9 @@ public class FormAuth extends javax.swing.JFrame {
             }
         });
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -159,6 +163,10 @@ public class FormAuth extends javax.swing.JFrame {
         contentPane.revalidate();
         contentPane.repaint();
     }//GEN-LAST:event_formWindowOpened
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        Auth.getInstance().clear();
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments

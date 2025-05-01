@@ -289,6 +289,8 @@ public class FormPesanBusana_Main extends javax.swing.JPanel {
         data.setBahan(bahan);
         data.setModelDesain(modelDesain);
         
+        System.out.println(data.getIdPesananBusana());
+        
         //Berpindah ke halaman selanjutnya Form Pesan Busana Ukuran
         main.ubahPanel("bukuran");
     }//GEN-LAST:event_btnNextActionPerformed

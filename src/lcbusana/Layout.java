@@ -6,8 +6,8 @@ package lcbusana;
 
 import decorationcomponent.RoundedImageButton;
 import java.awt.CardLayout;
-import javax.swing.UIManager;
 import lcbusana.auth.FormAuth;
+import session.Auth;
 
 /**
  *
@@ -36,6 +36,7 @@ public class Layout extends javax.swing.JFrame {
         
         setExtendedState(6);
         komponenBody();
+        sesuaikanTampilanAutentikasi();
     }
 
     /**
@@ -48,12 +49,49 @@ public class Layout extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        popUpProfileBAuth = new javax.swing.JPopupMenu();
+        menuLogin = new javax.swing.JMenuItem();
+        menuRegister = new javax.swing.JMenuItem();
+        popUPProfileAAuth = new javax.swing.JPopupMenu();
+        menuProfil = new javax.swing.JMenuItem();
+        menuLogOut = new javax.swing.JMenuItem();
         pnlNavigasi = new javax.swing.JPanel();
         btnHome = new javax.swing.JButton();
         btnPesanan = new javax.swing.JButton();
         btnProduk = new javax.swing.JButton();
         btnProfile = new RoundedImageButton();
         pnlBody = new javax.swing.JPanel();
+
+        menuLogin.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        menuLogin.setText("Log In");
+        menuLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLoginActionPerformed(evt);
+            }
+        });
+        popUpProfileBAuth.add(menuLogin);
+
+        menuRegister.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        menuRegister.setText("Register");
+        menuRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRegisterActionPerformed(evt);
+            }
+        });
+        popUpProfileBAuth.add(menuRegister);
+
+        menuProfil.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        menuProfil.setText("Profil");
+        popUPProfileAAuth.add(menuProfil);
+
+        menuLogOut.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        menuLogOut.setText("Log Out");
+        menuLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLogOutActionPerformed(evt);
+            }
+        });
+        popUPProfileAAuth.add(menuLogOut);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("LC Busana");
@@ -148,6 +186,7 @@ public class Layout extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(20, 10, 20, 30);
         pnlNavigasi.add(btnProfile, gridBagConstraints);
 
@@ -209,13 +248,41 @@ public class Layout extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btnProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdukActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnProdukActionPerformed
 
     private void btnProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfileActionPerformed
-        dispose();
-        new FormAuth().setVisible(true);
+        //Menampilkan Pop Up menu, berbeda sebelum dan sesudah terautentikasi
+        int offsetX = -btnProfile.getWidth() / 2;
+        if(Auth.getInstance().isAuth()){
+            popUPProfileAAuth.show(btnProfile, offsetX, btnProfile.getHeight());
+        } else {
+            popUpProfileBAuth.show(btnProfile, offsetX, btnProfile.getHeight());
+        }
     }//GEN-LAST:event_btnProfileActionPerformed
+
+    private void menuLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoginActionPerformed
+        //Mengubah ke halaman Login
+        dispose();
+        FormAuth fAuth = new FormAuth();
+        fAuth.setVisible(true);
+        fAuth.ubahPanel("Login");
+    }//GEN-LAST:event_menuLoginActionPerformed
+
+    private void menuRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRegisterActionPerformed
+        //Mengubah ke halaman Register
+        dispose();
+        FormAuth fAuth = new FormAuth();
+        fAuth.setVisible(true);
+        fAuth.ubahPanel("Register");
+    }//GEN-LAST:event_menuRegisterActionPerformed
+
+    private void menuLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLogOutActionPerformed
+        //Kembali ke halaman Autentikasi
+        dispose();
+        FormAuth fAuth = new FormAuth();
+        fAuth.setVisible(true);
+    }//GEN-LAST:event_menuLogOutActionPerformed
     
     private void komponenBody(){    
         pnlBody.add(new Dashboard(this), "dashboard");
@@ -257,8 +324,7 @@ public class Layout extends javax.swing.JFrame {
         bmain.isiDataEdit();
         bukuran.isiDataEdit();
         btambahan.isiDataEdit();
-        bwaktubiaya.isiDataEdit();
-        datadiri.isiDataEditPesanBusana();      
+        bwaktubiaya.isiDataEdit();   
         
         ubahPanel("bmain");
     }
@@ -273,6 +339,23 @@ public class Layout extends javax.swing.JFrame {
         datadiri.isiDataEditPermakBusana();      
         
         ubahPanel("pmain");
+    }
+    
+    public void keAutentikasi(){
+        dispose();
+        new FormAuth().setVisible(true);
+    }
+    
+    private void sesuaikanTampilanAutentikasi(){
+        if(!Auth.getInstance().isAuth()){
+            btnPesanan.setVisible(false);
+        } else {
+            btnPesanan.setVisible(true);
+        }
+        
+        //Refresh tampilan
+        revalidate();
+        repaint();
     }
     
     /**
@@ -315,7 +398,13 @@ public class Layout extends javax.swing.JFrame {
     private javax.swing.JButton btnPesanan;
     private javax.swing.JButton btnProduk;
     private javax.swing.JButton btnProfile;
+    private javax.swing.JMenuItem menuLogOut;
+    private javax.swing.JMenuItem menuLogin;
+    private javax.swing.JMenuItem menuProfil;
+    private javax.swing.JMenuItem menuRegister;
     private javax.swing.JPanel pnlBody;
     private javax.swing.JPanel pnlNavigasi;
+    private javax.swing.JPopupMenu popUPProfileAAuth;
+    private javax.swing.JPopupMenu popUpProfileBAuth;
     // End of variables declaration//GEN-END:variables
 }
