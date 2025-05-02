@@ -32,6 +32,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import session.Auth;
+import tools.FileIO;
 import tools.FormatData;
 
 /**
@@ -242,13 +243,15 @@ public class Pesanan_Permak extends javax.swing.JPanel {
                     int affectedRows = stmt.executeUpdate();
 
                     if (affectedRows > 0) {
+                        // Hapus File Gambar
+                        FileIO.hapusFile("attachments/PermakBusana", idPermak);
+                        
                         // Hapus baris dari tabel jika query berhasil
                         tampilkanDataPermak();
                         JOptionPane.showMessageDialog(this, "Data berhasil dihapus.");
                     } else {
                         JOptionPane.showMessageDialog(this, "Data tidak ditemukan atau gagal dihapus.", "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
                     }
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();

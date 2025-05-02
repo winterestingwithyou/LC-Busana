@@ -208,7 +208,7 @@ public class FormAuth extends javax.swing.JFrame {
         
         //Mengosongkan field
         login.setDefaultField();
-        register.clear();
+        register.setDefaultField();
     }//GEN-LAST:event_formComponentShown
 
     /**

@@ -132,7 +132,7 @@ public class DataPesanBusana {
             //1. Simpan ke tabel pesan_busana
             String sqlPesanan = "INSERT INTO pesanan_busana (id_pelanggan, jenis_busana, gambar_model, warna, bahan, ukuran_lingkar_dada, ukuran_pinggang, ukuran_pinggul, panjang_lengan, panjang_busana, tinggi_badan, lebar_bahu, aplikasi_tambahan, detail_khusus, kebutuhan_khusus, tanggal_perkiraan_jadi, kisaran_budget, metode_pembayaran) " +
                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement psPesan = conn.prepareStatement(sqlPesanan);
+            PreparedStatement psPesan = conn.prepareStatement(sqlPesanan, Statement.RETURN_GENERATED_KEYS);
             psPesan.setInt(1, idPelanggan);
             psPesan.setString(2, jenisBusana);
             psPesan.setString(3, modelDesain);
@@ -152,6 +152,13 @@ public class DataPesanBusana {
             psPesan.setDouble(17, kisaranBudget);
             psPesan.setString(18, metodePembayaran);
             psPesan.executeUpdate();
+            
+            //Dapatkan Id
+            try(ResultSet rs = psPesan.getGeneratedKeys()){
+                if (rs.next()) {
+                    setIdPesananBusana(rs.getInt(1));
+                }
+            }
         }
     }
 
@@ -198,6 +205,21 @@ public class DataPesanBusana {
                 stmtPesanan.setDouble(16, kisaranBudget);
                 stmtPesanan.setString(17, metodePembayaran);
                 stmtPesanan.setInt(18, idPesananBusana);
+                stmtPesanan.executeUpdate();
+        }
+    }
+    
+    public void updateModelDesain() throws SQLException {
+        String updatePesananQuery = """
+            UPDATE pesanan_busana SET
+                gambar_model = ? 
+            WHERE id_pesanan = ?
+        """;
+
+        try (Connection conn = Koneksi.getConnection();
+                PreparedStatement stmtPesanan = conn.prepareStatement(updatePesananQuery)) {
+                stmtPesanan.setString(1, modelDesain);
+                stmtPesanan.setInt(2, idPesananBusana);
                 stmtPesanan.executeUpdate();
         }
     }

@@ -292,6 +292,7 @@ public class Login extends javax.swing.JPanel {
     public void setDefaultField(){
         txtUsername.setText("Username");
         txtPassword.setText("Password");
+        txtPassword.setEchoChar((char) 0);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

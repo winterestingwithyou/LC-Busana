@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -99,7 +98,7 @@ public class DataPermakBusana {
             //1. Simpan ke tabel permak_busana
             String sqlPermak = "INSERT INTO pesanan_permak (id_pelanggan, jenis_busana, bahan, jumlah, jenis_permak, ukuran_sesudah, foto_pakaian, deskripsi_tambahan, tanggal_selesai, kisaran_biaya, metode_pembayaran) " +
                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement psPermak = conn.prepareStatement(sqlPermak);
+            PreparedStatement psPermak = conn.prepareStatement(sqlPermak, Statement.RETURN_GENERATED_KEYS);
             psPermak.setInt(1, idPelanggan);
             psPermak.setString(2, jenisPakaian);
             psPermak.setString(3, bahanPakaian);
@@ -112,6 +111,13 @@ public class DataPermakBusana {
             psPermak.setDouble(10, estimasiBiaya);
             psPermak.setString(11, metodePembayaran);
             psPermak.executeUpdate();
+            
+            //Dapatkan Id
+            try(ResultSet rs = psPermak.getGeneratedKeys()){
+                if (rs.next()) {
+                    setIdPermakBusana(rs.getInt(1));
+                }
+            }
         }
     }
 
@@ -149,6 +155,21 @@ public class DataPermakBusana {
             stmt.setInt(11, idPermakBusana);
 
             stmt.executeUpdate();
+        }
+    }
+    
+    public void updateFotoPakaian() throws SQLException {
+        String updatePesananQuery = """
+            UPDATE pesanan_permak SET
+                foto_pakaian = ? 
+            WHERE id_permak = ?
+        """;
+
+        try (Connection conn = Koneksi.getConnection();
+                PreparedStatement stmtPesanan = conn.prepareStatement(updatePesananQuery)) {
+                stmtPesanan.setString(1, fotoPakaian);
+                stmtPesanan.setInt(2, idPermakBusana);
+                stmtPesanan.executeUpdate();
         }
     }
 }

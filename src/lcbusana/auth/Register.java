@@ -311,12 +311,13 @@ public class Register extends javax.swing.JPanel {
         }
     }
     
-    public void clear(){
+    public void setDefaultField(){
         txtUsername.setText("Username");
         txtPassword.setText("Password");
         txtKonfirmasiPassword.setText("Konfirmasi Password");
+        txtPassword.setEchoChar((char) 0);
+        txtKonfirmasiPassword.setEchoChar((char) 0);
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;

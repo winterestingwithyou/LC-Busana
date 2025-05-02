@@ -32,6 +32,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import session.Auth;
+import tools.FileIO;
 import tools.FormatData;
 
 /**
@@ -249,6 +250,9 @@ public class Pesanan_Busana extends javax.swing.JPanel {
                     int affectedRows = stmt.executeUpdate();
 
                     if (affectedRows > 0) {
+                        // Hapus File Gambar
+                        FileIO.hapusFile("attachments/PesananBusana", idPesanan);
+                        
                         // Hapus baris dari tabel jika query berhasil
                         tampilkanDataPesan();
                         JOptionPane.showMessageDialog(this, "Data berhasil dihapus.");

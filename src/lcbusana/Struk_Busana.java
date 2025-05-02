@@ -846,7 +846,8 @@ public class Struk_Busana extends javax.swing.JDialog {
         lbNilaiMetode.setText(metode);
 
         //Menampilkan Gambar pada Model 
-        ImageUtil.setImageToLabel(lbNilaiModel, data.get(1));
+        String imagePath = "attachments/PesananBusana/" + data.get(1).toString();
+        ImageUtil.setImageToLabel(lbNilaiModel, imagePath);
 
         //Mengubah background Warna sesuai warna yang dipilih
         lbNilaiWarna.setText(" ");

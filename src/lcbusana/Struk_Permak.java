@@ -679,7 +679,8 @@ public class Struk_Permak extends javax.swing.JDialog {
         lbNilaiMetode.setText(metode);
 
         //Menampilkan Gambar pada Model 
-        ImageUtil.setImageToLabel(lbNilaiGambarPakaian, data.get(5));
+        String imagePath = "attachments/PermakBusana/" + data.get(5).toString();
+        ImageUtil.setImageToLabel(lbNilaiGambarPakaian, imagePath);
         
         //Menampilkan data diri di struk
         Auth auth = Auth.getInstance();

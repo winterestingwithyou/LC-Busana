@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import tools.Selector;
 import session.Auth;
+import tools.FileIO;
 
 /**
  *
@@ -281,13 +282,7 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
         ImageIcon icon = new ImageIcon(getClass().getResource("/image/bg-form.png"));
         Image img = icon.getImage();
         g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
-    }
-    
-    private void tampilkanBiaya(){
-        DataPesanBusana data = DataPesanBusana.getInstance();
-        String biaya = String.valueOf((long) data.getKisaranBudget());
-        txtbiaya.setText(biaya);
-    }
+    }    
     
     private void btnberikutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnberikutActionPerformed
         // Ambil nilai dari setiap input field
@@ -328,14 +323,18 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
         if(main.isOnEdit()){
             // Perbarui Data
             if(updateDataPesanBusana(tanggal, biaya, metode)){
-                // Selesai Edit, kembali kembali ke Pesanan
-                main.ubahPanel("pesanan");
+                if(simpanGambar()){
+                    // Selesai Edit, kembali kembali ke Pesanan
+                    main.ubahPanel("pesanan");
+                }                
             }   
         } else {
             // Simpan data
             if(simpanDataPesanBusana(tanggal, biaya, metode)){
-                // Selesai, kembali ke form dashboatd
-                main.ubahPanel("dashboard"); 
+                if(simpanGambar()){
+                    // Selesai, kembali ke form dashboatd
+                    main.ubahPanel("dashboard"); 
+                }
             }
         }
     }//GEN-LAST:event_btnberikutActionPerformed
@@ -389,7 +388,7 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
             data.setKisaranBudget(biaya);
             data.setMetodePembayaran(metode);
             data.setIdPelanggan(Auth.getInstance().getAuthUser());
-            data.save();
+            data.save();            
             
             return true;
         } catch (SQLException e) {
@@ -409,6 +408,23 @@ public class FormPesanBusana_WaktuBiaya extends javax.swing.JPanel {
             return true;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Gagal Memperbarui Data \n" + e, "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+    
+    private boolean simpanGambar(){
+        try{
+            //Simpan file gambar
+            DataPesanBusana data = DataPesanBusana.getInstance();
+            String idPesanBusana = String.valueOf(data.getIdPesananBusana());
+            String gambarLokal = data.getModelDesain();
+            String gambarBaru = FileIO.simpanFile("attachments/PesananBusana", idPesanBusana, gambarLokal);
+            data.setModelDesain(gambarBaru);
+            data.updateModelDesain();
+            
+            return true;
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal Menyimpan Gambar \n" + e, "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }

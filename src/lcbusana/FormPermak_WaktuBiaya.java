@@ -18,6 +18,7 @@ import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import session.Auth;
+import tools.FileIO;
 import tools.Selector;
 
 /**
@@ -307,14 +308,18 @@ public class FormPermak_WaktuBiaya extends javax.swing.JPanel {
         if(main.isOnEdit()){
             // Perbarui Data
             if(updateDataPermakBusana(tanggal, biaya, metode)){
-                // Selesai Edit, kembali kembali ke Pesanan
-                main.ubahPanel("pesanan");
+                if(simpanGambar()){
+                    // Selesai Edit, kembali kembali ke Pesanan
+                    main.ubahPanel("pesanan");                    
+                }
             }   
         } else {
             // Simpan data
             if(simpanDataPermakBusana(tanggal, biaya, metode)){
-                // Selesai, kembali ke form dashboatd
-                main.ubahPanel("dashboard"); 
+                if(simpanGambar()){
+                    // Selesai, kembali ke form dashboatd
+                    main.ubahPanel("dashboard");                     
+                }
             }
         }
     }//GEN-LAST:event_btnBerikutnyaActionPerformed
@@ -383,6 +388,23 @@ public class FormPermak_WaktuBiaya extends javax.swing.JPanel {
             return true;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Gagal Memperbarui Data \n" + e, "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+    
+    private boolean simpanGambar(){
+        try{
+            //Simpan file gambar
+            DataPermakBusana data = DataPermakBusana.getInstance();
+            String idPermakBusana = String.valueOf(data.getIdPermakBusana());
+            String gambarLokal = data.getFotoPakaian();
+            String gambarBaru = FileIO.simpanFile("attachments/PermakBusana", idPermakBusana, gambarLokal);
+            data.setFotoPakaian(gambarBaru);
+            data.updateFotoPakaian();
+            
+            return true;
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal Menyimpan Gambar \n" + e, "Terjadi Kesalahan", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
