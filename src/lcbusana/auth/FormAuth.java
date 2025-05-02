@@ -109,7 +109,7 @@ public class FormAuth extends javax.swing.JFrame {
         btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Autentikasi");
+        setTitle("LC Busana");
         setExtendedState(6);
         setPreferredSize(new java.awt.Dimension(600, 700));
         addComponentListener(new java.awt.event.ComponentAdapter() {

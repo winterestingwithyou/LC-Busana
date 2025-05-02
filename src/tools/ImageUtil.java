@@ -4,7 +4,10 @@
  */
 package tools;
 
+import java.awt.Dimension;
 import java.awt.Image;
+import java.io.File;
+import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -25,5 +28,56 @@ public class ImageUtil {
 
         // Menyesuaikan tinggi label agar tetap 1:1
         label.setSize(width, height);
+    }
+    
+    public static void setImageToLabel(JLabel label, String pathGambarTanpaExt, String pathGambarDefault) {
+        String[] ekstensiUmum = { ".png", ".jpg", ".jpeg" };
+        String pathDitemukan = null;
+
+        for (String ekst : ekstensiUmum) {
+            String cobaPath = pathGambarTanpaExt + ekst;
+            if (new File(cobaPath).exists()) {
+                pathDitemukan = cobaPath;
+                break;
+            }
+        }
+
+        if (pathDitemukan == null) {
+            pathDitemukan = pathGambarDefault;
+        }
+
+        ImageIcon icon = new ImageIcon(pathDitemukan);
+        Image image = icon.getImage().getScaledInstance(
+                label.getWidth(), label.getHeight(),
+                Image.SCALE_SMOOTH
+        );
+        label.setIcon(new ImageIcon(image));
+    }
+    
+    public static void setImageToLabel(JLabel label, String pathGambarTanpaExt, URL pathDefaultUrl) {
+        String[] ekstensiUmum = { ".png", ".jpg", ".jpeg" };
+        String pathDitemukan = null;
+
+        for (String ekst : ekstensiUmum) {
+            String cobaPath = pathGambarTanpaExt + ekst;
+            if (new File(cobaPath).exists()) {
+                pathDitemukan = cobaPath;
+                break;
+            }
+        }
+
+        ImageIcon icon;
+        if (pathDitemukan != null) {
+            icon = new ImageIcon(pathDitemukan);
+        } else {
+            icon = new ImageIcon(pathDefaultUrl);
+        }
+
+        Dimension size = label.getPreferredSize();
+        Image image = icon.getImage().getScaledInstance(
+                (int) size.getWidth(), (int) size.getHeight(),
+                Image.SCALE_SMOOTH
+        );
+        label.setIcon(new ImageIcon(image));
     }
 }

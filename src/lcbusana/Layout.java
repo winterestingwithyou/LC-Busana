@@ -25,8 +25,7 @@ public class Layout extends javax.swing.JFrame {
     private FormPermak_Main pmain = new FormPermak_Main(this);
     private FormPermak_Jenis pjenis = new FormPermak_Jenis(this);
     private FormPermak_Tambahan ptambahan = new FormPermak_Tambahan(this);
-    private FormPermak_WaktuBiaya pwaktubiaya = new FormPermak_WaktuBiaya(this);
-    private FormDataDiri datadiri = new FormDataDiri(this);      
+    private FormPermak_WaktuBiaya pwaktubiaya = new FormPermak_WaktuBiaya(this);    
             
     /**
      * Creates new form Layout
@@ -187,7 +186,7 @@ public class Layout extends javax.swing.JFrame {
         btnProfile.setBorderPainted(false);
         btnProfile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnProfile.setFocusPainted(false);
-        btnProfile.setMinimumSize(new java.awt.Dimension(40, 40));
+        btnProfile.setMinimumSize(new java.awt.Dimension(60, 60));
         btnProfile.setPreferredSize(new java.awt.Dimension(60, 60));
         btnProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,7 +304,7 @@ public class Layout extends javax.swing.JFrame {
 
     private void menuProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProfilActionPerformed
         //Ubah Ke halaman Profil
-        ubahPanel("datadiri");
+        ubahPanel("profil");
     }//GEN-LAST:event_menuProfilActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
@@ -324,7 +323,7 @@ public class Layout extends javax.swing.JFrame {
         pnlBody.add(pjenis, "pjenis");
         pnlBody.add(ptambahan, "ptambahan");
         pnlBody.add(pwaktubiaya, "pwaktubiaya");
-        pnlBody.add(datadiri, "datadiri");
+        pnlBody.add(new FormProfil(this), "profil");
     }
         
     public void ubahPanel(String namaPanel){
@@ -336,7 +335,6 @@ public class Layout extends javax.swing.JFrame {
         bukuran.clear();
         btambahan.clear();
         bwaktubiaya.clear();
-        datadiri.clear();
     }
           
     public void permakBusanaClear(){
@@ -344,7 +342,6 @@ public class Layout extends javax.swing.JFrame {
         pjenis.clear();
         ptambahan.clear();
         pwaktubiaya.clear();
-        datadiri.clear();
     }
     
     public void editPesananBusana(){
