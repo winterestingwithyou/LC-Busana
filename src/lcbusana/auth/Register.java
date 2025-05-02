@@ -285,17 +285,15 @@ public class Register extends javax.swing.JPanel {
             try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
                 insertStmt.setString(1, username);
                 insertStmt.setString(2, password); // diasumsikan sudah di-hash sebelum dikirim ke fungsi ini
-
-                int result = insertStmt.executeUpdate();
-                if (result > 0) {
+                insertStmt.executeUpdate();
+                
+                ResultSet rs = insertStmt.getGeneratedKeys();
+                if (rs.next()) {
                     //Registrasi Berhasil
                     Auth auth = Auth.getInstance();
                     auth.setAuth(true);
-                    
-                    ResultSet rs = insertStmt.getGeneratedKeys();
-                    if (rs.next()) {
-                        auth.setAuthUser(rs.getInt(1));
-                    }
+                    auth.setUsername(username);
+                    auth.setAuthUser(rs.getInt(1));
                     
                     JOptionPane.showMessageDialog(null, "Registrasi berhasil", "Sukses", JOptionPane.INFORMATION_MESSAGE);
                     return true;

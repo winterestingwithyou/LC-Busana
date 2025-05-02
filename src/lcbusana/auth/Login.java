@@ -270,6 +270,7 @@ public class Login extends javax.swing.JPanel {
                     Auth auth = Auth.getInstance();
                     auth.setAuth(true);
                     auth.setAuthUser(rs.getInt("id_pelanggan"));
+                    auth.setUsername(rs.getString("username"));
                     auth.setNamaLengkap(rs.getString("nama_lengkap"));
                     auth.setNomorWa(rs.getString("nomor_wa"));
                     auth.setEmail(rs.getString("email"));
