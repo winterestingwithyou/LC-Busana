@@ -326,7 +326,7 @@ public class Layout extends javax.swing.JFrame {
         pnlBody.add(pjenis, "pjenis");
         pnlBody.add(ptambahan, "ptambahan");
         pnlBody.add(pwaktubiaya, "pwaktubiaya");
-        pnlBody.add(new FormProfil(this), "profil");
+        pnlBody.add(new Profil(this), "profil");
     }
         
     public void ubahPanel(String namaPanel){

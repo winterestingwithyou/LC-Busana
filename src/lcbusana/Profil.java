@@ -26,12 +26,12 @@ import tools.FileIO;
  *
  * @author Acer
  */
-public class FormProfil extends javax.swing.JPanel {
+public class Profil extends javax.swing.JPanel {
     private Layout main;
     /**
      * Creates new form FormProfil
      */
-    public FormProfil(JFrame frame) {
+    public Profil(JFrame frame) {
         initComponents();
         this.main = (Layout) frame;
         
