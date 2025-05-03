@@ -10,6 +10,7 @@ import decorationcomponent.RoundedButton;
 import decorationcomponent.BackgroundPanel;
 import decorationcomponent.RoundedPanel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import session.Auth;
 
 /**
@@ -126,10 +127,45 @@ public class Dashboard extends javax.swing.JPanel {
         add(pnlTombol, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+    private boolean isDataLengkap(){
+        Auth data = Auth.getInstance();
+        
+        //validasi data
+        if(data.getNamaLengkap() == null ||
+                data.getNomorWa() == null ||
+                data.getEmail() == null ||
+                data.getAlamat() == null){
+            return false;
+        }
+        return true;
+    }
+    
+    private void peringatanDataTidakLengkap(){
+        int konfirmasi = JOptionPane.showConfirmDialog(main, 
+        "Data anda belum lengkap \n\n"
+                + "Lengkapi sekarang untuk lanjut!", 
+        "Peringatan", 
+        JOptionPane.YES_NO_OPTION, 
+        JOptionPane.WARNING_MESSAGE);
+
+        // Jika user memilih "No", hentikan proses
+        if (konfirmasi == JOptionPane.NO_OPTION) {
+            return;
+        }
+
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+            main.ubahPanel("profil");
+        }
+    }
+    
     private void btnPesanBusanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesanBusanaActionPerformed
         if(Auth.getInstance().isAuth()){
-            main.ubahPanel("bmain");
-            main.setStatus("Busana");
+            if(!isDataLengkap()){
+                peringatanDataTidakLengkap();
+            } else {
+                main.ubahPanel("bmain");
+                main.setStatus("Busana");
+            }
         } else {
             main.keAutentikasi();
         }
@@ -137,8 +173,12 @@ public class Dashboard extends javax.swing.JPanel {
 
     private void btnPermakBusanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPermakBusanaActionPerformed
         if(Auth.getInstance().isAuth()){
-            main.ubahPanel("pmain");
-            main.setStatus("Permak");
+            if(!isDataLengkap()){
+                peringatanDataTidakLengkap();
+            } else {
+               main.ubahPanel("pmain");
+               main.setStatus("Permak"); 
+            }            
         } else {
             main.keAutentikasi();
         }
