@@ -8,6 +8,7 @@ import decorationcomponent.RoundedImageButton;
 import java.awt.CardLayout;
 import lcbusana.auth.FormAuth;
 import session.Auth;
+import tools.ImageUtil;
 
 /**
  *
@@ -37,6 +38,7 @@ public class Layout extends javax.swing.JFrame {
         setExtendedState(6);
         komponenBody();
         sesuaikanTampilanAutentikasi();
+        loadProfil();
     }
 
     /**
@@ -310,6 +312,7 @@ public class Layout extends javax.swing.JFrame {
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // Menyesuaikan Tampilan sesuai dengan keadaan autentikasi
         sesuaikanTampilanAutentikasi();
+        loadProfil();
     }//GEN-LAST:event_formComponentShown
     
     private void komponenBody(){    
@@ -387,6 +390,16 @@ public class Layout extends javax.swing.JFrame {
         //Refresh tampilan
         revalidate();
         repaint();
+    }
+    
+    //load photo profil
+    public void loadProfil(){
+        String pathProfilTanpaExt = "attachments/Profil/" + Auth.getInstance().getAuthUser();
+        String pathProfil = ImageUtil.cariPathGambarYangAda(pathProfilTanpaExt);
+        
+        //load photo profil yang ada
+        RoundedImageButton profil = (RoundedImageButton) btnProfile;
+        profil.setImagePath(pathProfil);   
     }
     
     /**

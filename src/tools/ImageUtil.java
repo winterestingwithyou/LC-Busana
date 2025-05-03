@@ -55,16 +55,7 @@ public class ImageUtil {
     }
     
     public static void setImageToLabel(JLabel label, String pathGambarTanpaExt, URL pathDefaultUrl) {
-        String[] ekstensiUmum = { ".png", ".jpg", ".jpeg" };
-        String pathDitemukan = null;
-
-        for (String ekst : ekstensiUmum) {
-            String cobaPath = pathGambarTanpaExt + ekst;
-            if (new File(cobaPath).exists()) {
-                pathDitemukan = cobaPath;
-                break;
-            }
-        }
+        String pathDitemukan = cariPathGambarYangAda(pathGambarTanpaExt);
 
         ImageIcon icon;
         if (pathDitemukan != null) {
@@ -79,5 +70,18 @@ public class ImageUtil {
                 Image.SCALE_SMOOTH
         );
         label.setIcon(new ImageIcon(image));
+    }
+    
+    public static String cariPathGambarYangAda(String pathTanpaEkstensi) {
+        String[] ekstensiUmum = { ".png", ".jpg", ".jpeg" };
+
+        for (String ekst : ekstensiUmum) {
+            String cobaPath = pathTanpaEkstensi + ekst;
+            if (new File(cobaPath).exists()) {
+                return cobaPath;
+            }
+        }
+
+        return null;
     }
 }

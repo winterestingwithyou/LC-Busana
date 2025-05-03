@@ -60,6 +60,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Edit Photo Profile"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditPhotoActionPerformed"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RoundedButton(10);"/>
           </AuxValues>

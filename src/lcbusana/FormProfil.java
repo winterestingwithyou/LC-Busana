@@ -19,6 +19,8 @@ import tools.ImageUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import tools.Chooser;
+import tools.FileIO;
 
 /**
  *
@@ -84,6 +86,11 @@ public class FormProfil extends javax.swing.JPanel {
         btnEditPhoto.setBackground(new java.awt.Color(207, 183, 146));
         btnEditPhoto.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnEditPhoto.setText("Edit Photo Profile");
+        btnEditPhoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditPhotoActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
@@ -373,6 +380,18 @@ public class FormProfil extends javax.swing.JPanel {
                     JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_txtNamaKeyTyped
+
+    private void btnEditPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditPhotoActionPerformed
+        String dirProfil = "attachments/Profil";
+        String profilBaru = Chooser.chooseFile();
+        String idUser = String.valueOf(Auth.getInstance().getAuthUser());
+        
+        //Simpan foto profil baru
+        FileIO.simpanFile(dirProfil, idUser, profilBaru);
+        
+        setPhotoProfile();
+        main.loadProfil();
+    }//GEN-LAST:event_btnEditPhotoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditPhoto;

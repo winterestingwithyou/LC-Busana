@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
+import java.io.File;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,13 +22,11 @@ import javax.swing.JButton;
  */
 public class RoundedImageButton extends JButton {
     private Image image;   
-    private static final String DEFAULT_IMAGE_RESOURCE = "default-profile.png";
 
-    // Constructor kosong pakai gambar default dari resource
-    public RoundedImageButton() {
-        this(DEFAULT_IMAGE_RESOURCE);
+    public RoundedImageButton(){
+        this(null);
     }
-
+    
     public RoundedImageButton(String imagePath) {
         setImagePath(imagePath);
         setContentAreaFilled(false);
@@ -36,17 +35,28 @@ public class RoundedImageButton extends JButton {
         setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    // ✅ Setter untuk mengubah gambar
     public void setImagePath(String imagePath) {
         if (imagePath != null) {
-            URL imageURL = getClass().getResource("/image/"+ imagePath);
-            if (imageURL != null) {
-                this.image = new ImageIcon(imageURL).getImage();
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                this.image = new ImageIcon(imagePath).getImage();
             } else {
-                System.err.println("Gagal menemukan gambar: " + imagePath);
+                System.err.println("Gambar tidak ditemukan: " + imagePath);
+                loadDefaultImage();
             }
+        } else {
+            loadDefaultImage();
         }
         repaint();
+    }
+
+    private void loadDefaultImage() {
+        URL imageURL = getClass().getResource("/image/default-profile.png");
+        if (imageURL != null) {
+            this.image = new ImageIcon(imageURL).getImage();
+        } else {
+            System.err.println("Gagal memuat gambar default: /image/default-profile.png");
+        }
     }
 
     @Override
