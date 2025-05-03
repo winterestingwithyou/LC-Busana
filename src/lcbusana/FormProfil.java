@@ -9,6 +9,7 @@ import decorationcomponent.RoundedButton;
 import decorationcomponent.RoundedLabel;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -68,7 +69,7 @@ public class FormProfil extends javax.swing.JPanel {
                 formComponentShown(evt);
             }
         });
-        setLayout(new java.awt.GridLayout());
+        setLayout(new java.awt.GridLayout(1, 0));
 
         pnlProfil.setOpaque(false);
         pnlProfil.setLayout(new java.awt.GridBagLayout());
@@ -162,6 +163,11 @@ public class FormProfil extends javax.swing.JPanel {
         pnlDataDiri.add(jLabel4, gridBagConstraints);
 
         txtNama.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtNama.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNamaKeyTyped(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -171,6 +177,16 @@ public class FormProfil extends javax.swing.JPanel {
         pnlDataDiri.add(txtNama, gridBagConstraints);
 
         txtNoWa.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtNoWa.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNoWaFocusLost(evt);
+            }
+        });
+        txtNoWa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoWaKeyTyped(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -180,6 +196,11 @@ public class FormProfil extends javax.swing.JPanel {
         pnlDataDiri.add(txtNoWa, gridBagConstraints);
 
         txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtEmailFocusLost(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -297,6 +318,61 @@ public class FormProfil extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
+    private void txtNoWaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNoWaFocusLost
+        String input = txtNoWa.getText().trim();
+            if (!input.matches("^08\\d{9,11}$")) {
+                JOptionPane.showMessageDialog(main, "Nomor tidak valid! Harus diawali 08 dan 11-13 digit.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtNoWa.setText("");
+            }
+    }//GEN-LAST:event_txtNoWaFocusLost
+
+    private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
+        String input = txtEmail.getText().trim();
+            if (!input.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+                JOptionPane.showMessageDialog(main, "Email tidak valid!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+                txtEmail.setText("");
+            }
+    }//GEN-LAST:event_txtEmailFocusLost
+
+    private void txtNoWaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoWaKeyTyped
+        char c = evt.getKeyChar();
+
+        // Jika bukan digit dan bukan backspace/delete, tampilkan peringatan
+        if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE) {
+            evt.consume(); // Mencegah karakter ditulis ke JTextField
+            JOptionPane.showMessageDialog(
+                        main,
+                        "Nomor Whatsapp harus diisi dengan angka",
+                        "Peringatan",
+                        JOptionPane.WARNING_MESSAGE
+                    );
+        }
+        
+        // Batasi panjang maksimal 13 digit
+        if (Character.isDigit(c) && txtNoWa.getText().length() >= 13) {
+            evt.consume();
+            JOptionPane.showMessageDialog(
+                main,
+                "Nomor Whatsapp tidak boleh lebih dari 13 digit!",
+                "Peringatan",
+                JOptionPane.WARNING_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_txtNoWaKeyTyped
+
+    private void txtNamaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNamaKeyTyped
+        char c = evt.getKeyChar();
+
+        // Jika bukan huruf, bukan spasi, bukan titik, dan bukan backspace/delete, tampilkan peringatan
+        if (!Character.isLetter(c) && c != ' ' && c != '.' && c != KeyEvent.VK_BACK_SPACE) {
+            evt.consume(); // Mencegah karakter tidak valid masuk
+            JOptionPane.showMessageDialog(
+                    main,
+                    "Nama harus diisi dengan huruf atau spasi",
+                    "Peringatan",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtNamaKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditPhoto;
