@@ -6,6 +6,8 @@ package lcbusana;
 
 import decorationcomponent.RoundedImageButton;
 import java.awt.CardLayout;
+import java.awt.Dimension;
+import javax.swing.SwingUtilities;
 import lcbusana.auth.FormAuth;
 import session.Auth;
 import tools.ImageUtil;
@@ -39,6 +41,7 @@ public class Layout extends javax.swing.JFrame {
         komponenBody();
         sesuaikanTampilanAutentikasi();
         loadProfil();
+        
     }
 
     /**
@@ -274,7 +277,7 @@ public class Layout extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btnProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdukActionPerformed
-        
+        ubahPanel("produk");
     }//GEN-LAST:event_btnProdukActionPerformed
 
     private void btnProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfileActionPerformed
@@ -326,6 +329,7 @@ public class Layout extends javax.swing.JFrame {
         pnlBody.add(pjenis, "pjenis");
         pnlBody.add(ptambahan, "ptambahan");
         pnlBody.add(pwaktubiaya, "pwaktubiaya");
+        pnlBody.add(new Produk(), "produk");
         pnlBody.add(new Profil(this), "profil");
     }
         
