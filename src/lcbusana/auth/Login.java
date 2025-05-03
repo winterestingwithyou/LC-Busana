@@ -234,7 +234,7 @@ public class Login extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        String username = txtUsername.getText();
+        String username = txtUsername.getText().trim();
         String password = String.valueOf(txtPassword.getPassword());
         String hashedPassword = PasswordUtils.hashPassword(password);
          

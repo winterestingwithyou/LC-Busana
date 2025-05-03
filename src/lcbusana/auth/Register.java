@@ -247,7 +247,7 @@ public class Register extends javax.swing.JPanel {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        String username = txtUsername.getText();
+        String username = txtUsername.getText().trim();
         String password = String.valueOf(txtPassword.getPassword());
         String hashedPassword = PasswordUtils.hashPassword(password);
         String konfirmasiPassword = String.valueOf(txtPassword.getPassword());
